@@ -219,8 +219,7 @@ class SmartBlindGlassesWinTest:
             obstacle_boxes = []
 
             if len(results) > 0 and results[0].boxes is not None:
-                for box in results[0].boxes:
-                    obstacle_boxes.append(box)
+                obstacle_boxes = list(results[0].boxes)
 
             with self.tof_lock:
                 min_center_dist = np.min(self.tof_matrix[:, 3:5])
