@@ -1,6 +1,5 @@
 """Fake STM32 tests: no pyserial, models, numpy, camera or board required."""
 
-import collections
 import struct
 import threading
 import time
