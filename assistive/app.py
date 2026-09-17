@@ -8,7 +8,7 @@ import socket
 import threading
 import time
 
-from .audio import SpeechWorker
+from .audio import SpeechWorker, SpeechRequest
 from .camera import CameraWorker
 from .navigation import NavigationPolicy
 from .worker import ModelProcess
@@ -84,8 +84,8 @@ class AssistiveApp:
     def _start_ocr(self, snapshot):
         # snapshot captured before shutdown/loading; never OCR a later unrelated frame.
         self.snapshot = snapshot
-        self.speech.speak("Đang đọc chữ. Bạn hãy đứng yên.", priority=5,
-                          key="ocr-start", ttl=30., repeat_after=0., replace=True)
+        self.speech.speak(SpeechRequest("Đang đọc chữ. Bạn hãy đứng yên.", priority=5,
+                          key="ocr-start", ttl=30., repeat_after=0., replace=True))
         self.models.close()
         self.models.start("ocr", dict(self.config["ocr"], mock=self.mock),
                           self.runtime.get("model_load_timeout", 90.))
@@ -94,8 +94,8 @@ class AssistiveApp:
     def _say_ocr(self, text):
         self.models.close()  # Return OCR memory while Piper reads; YOLO remains unloaded.
         self.snapshot = None
-        self.ocr_ticket = self.speech.speak(text or "Không đọc được chữ rõ ràng. Bạn hãy thử lại.",
-            priority=5, key="ocr-result", ttl=60., repeat_after=0.)
+        self.ocr_ticket = self.speech.speak(SpeechRequest(text or "Không đọc được chữ rõ ràng. Bạn hãy thử lại.",
+            priority=5, key="ocr-result", ttl=60., repeat_after=0.))
         self._set_mode(Mode.OCR_SPEAKING)
 
     def run(self, duration=None, mock_button_after=None):
@@ -123,11 +123,11 @@ class AssistiveApp:
                     self.last_tof_seen = now
                     alert = self.tof_policy.analyze([], tof, now=time.monotonic())
                     if alert["priority"] == 0 and alert["text"]:
-                        self.speech.speak(alert["text"], priority=0, key=alert["key"],
-                                          repeat_after=3., ttl=1.)
+                        self.speech.speak(SpeechRequest(alert["text"], priority=0, key=alert["key"],
+                                          repeat_after=3., ttl=1.))
                 elif now - self.last_tof_seen > 3.:
-                    self.speech.speak("Chưa có dữ liệu khoảng cách. Bạn hãy thận trọng.",
-                                      priority=3, key="tof-unavailable", ttl=5., repeat_after=20.)
+                    self.speech.speak(SpeechRequest("Chưa có dữ liệu khoảng cách. Bạn hãy thận trọng.",
+                                      priority=3, key="tof-unavailable", ttl=5., repeat_after=20.))
                 if self.mock and mock_button_after is not None and not button_sent:
                     if now - started_at >= mock_button_after and self.mode == Mode.NAVIGATING:
                         self.link.press()
@@ -140,7 +140,7 @@ class AssistiveApp:
                     elif self.mode in (Mode.OCR_LOADING, Mode.OCR_RUNNING, Mode.OCR_SPEAKING):
                         log.info("Button acknowledged while OCR busy; request coalesced")
                     else:
-                        self.speech.speak("Camera chưa sẵn sàng. Bạn hãy bấm lại.", priority=5)
+                        self.speech.speak(SpeechRequest("Camera chưa sẵn sàng. Bạn hãy bấm lại.", priority=5))
                 try:
                     event = self.models.poll()
                     if event:
@@ -153,8 +153,8 @@ class AssistiveApp:
                         self.yolo_failures += 1
                         if self.yolo_failures >= 3:
                             raise RuntimeError("YOLO repeatedly failed") from exc
-                        self.speech.speak("Nhận diện tạm gián đoạn. Bạn hãy dừng lại.",
-                                          priority=1, key="ai-failed", repeat_after=0.)
+                        self.speech.speak(SpeechRequest("Nhận diện tạm gián đoạn. Bạn hãy dừng lại.",
+                                          priority=1, key="ai-failed", repeat_after=0.))
                         self._start_yolo()
                 if self.mode == Mode.NAVIGATING and frame is not None:
                     interval = 1. / self.runtime.get("max_inference_fps", 5.)
@@ -192,8 +192,8 @@ class AssistiveApp:
                 self._say_ocr(result)
             elif self.mode == Mode.NAVIGATING:
                 if now - captured > self.runtime.get("result_max_age", 1.5):
-                    self.speech.speak("Hình ảnh xử lý chậm. Bạn hãy dừng lại.", priority=2,
-                                      key="vision-stale", repeat_after=10.)
+                    self.speech.speak(SpeechRequest("Hình ảnh xử lý chậm. Bạn hãy dừng lại.", priority=2,
+                                      key="vision-stale", repeat_after=10.))
                     return
                 self.yolo_failures = 0
                 tof = self.link.get_tof()
@@ -202,8 +202,8 @@ class AssistiveApp:
                     tof = None
                 alert = self.navigation.analyze(result, tof, now=time.monotonic())
                 if alert["text"]:
-                    self.speech.speak(alert["text"], priority=alert["priority"],
-                        key=alert["key"], ttl=2., repeat_after=self.runtime.get("repeat_seconds", 5.))
+                    self.speech.speak(SpeechRequest(alert["text"], priority=alert["priority"],
+                        key=alert["key"], ttl=2., repeat_after=self.runtime.get("repeat_seconds", 5.)))
 
     def close(self):
         if self.closed:

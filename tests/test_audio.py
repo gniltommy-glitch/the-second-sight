@@ -3,7 +3,7 @@ import time
 import unittest
 from unittest.mock import patch
 
-from assistive.audio import SpeechWorker, split_text
+from assistive.audio import SpeechWorker, SpeechRequest, split_text
 
 
 class TextSynthesizer:
@@ -39,10 +39,10 @@ class SpeechWorkerTests(unittest.TestCase):
         worker = self.make_worker(link)
         with patch("assistive.audio.MockSynthesizer", TextSynthesizer):
             worker.start()
-            old = worker.speak("old navigation", key="old", ttl=30)
+            old = worker.speak(SpeechRequest("old navigation", key="old", ttl=30))
             self.assertTrue(link.first_started.wait(1))
-            queued = worker.speak("queued navigation", key="queued", ttl=30)
-            urgent = worker.speak("stop immediately", priority=0, key="urgent", ttl=30)
+            queued = worker.speak(SpeechRequest("queued navigation", key="queued", ttl=30))
+            urgent = worker.speak(SpeechRequest("stop immediately", priority=0, key="urgent", ttl=30))
             self.assertTrue(urgent.done.wait(1))
         self.assertTrue(old.cancelled.is_set())
         self.assertTrue(old.done.is_set())
@@ -56,9 +56,9 @@ class SpeechWorkerTests(unittest.TestCase):
         worker = self.make_worker(link)
         with patch("assistive.audio.MockSynthesizer", TextSynthesizer):
             worker.start()
-            urgent = worker.speak("stop immediately", priority=0, key="urgent", ttl=30)
+            urgent = worker.speak(SpeechRequest("stop immediately", priority=0, key="urgent", ttl=30))
             self.assertTrue(link.first_started.wait(1))
-            replacement = worker.speak("reading text", priority=5, key="ocr", replace=True, ttl=30)
+            replacement = worker.speak(SpeechRequest("reading text", priority=5, key="ocr", replace=True, ttl=30))
             self.assertFalse(urgent.cancelled.is_set(), "Mode switching must preserve emergency speech")
             link.release_first.set()
             self.assertTrue(replacement.done.wait(1))
@@ -69,10 +69,10 @@ class SpeechWorkerTests(unittest.TestCase):
         link = ControlledLink()
         link.release_first.set()
         worker = self.make_worker(link)
-        first = worker.speak("first", key="first", ttl=30)
-        duplicate = worker.speak("first", key="first", ttl=30)
-        second = worker.speak("second", key="second", ttl=-1)
-        third = worker.speak("third", key="third", ttl=30)
+        first = worker.speak(SpeechRequest("first", key="first", ttl=30))
+        duplicate = worker.speak(SpeechRequest("first", key="first", ttl=30))
+        second = worker.speak(SpeechRequest("second", key="second", ttl=-1))
+        third = worker.speak(SpeechRequest("third", key="third", ttl=30))
         self.assertTrue(duplicate.cancelled.is_set())
         self.assertTrue(duplicate.done.is_set())
         self.assertTrue(first.done.is_set())
@@ -89,7 +89,7 @@ class SpeechWorkerTests(unittest.TestCase):
         worker = self.make_worker(BrokenLink())
         with patch("assistive.audio.MockSynthesizer", TextSynthesizer):
             worker.start()
-            ticket = worker.speak("hello", ttl=30)
+            ticket = worker.speak(SpeechRequest("hello", ttl=30))
             self.assertTrue(ticket.done.wait(1))
             worker.thread.join(1)
         self.assertIsInstance(ticket.error, OSError)
