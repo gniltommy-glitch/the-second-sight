@@ -120,6 +120,7 @@ class SmartBlindGlassesWinTest:
         self.height = 360
 
         self.frame_lock = threading.Lock()
+        self.frame_event = threading.Event()
         self.current_frame = None
         self.annotated_frame = None
         self.running = False
@@ -155,7 +156,7 @@ class SmartBlindGlassesWinTest:
                 continue
             with self.frame_lock:
                 self.current_frame = frame
-            time.sleep(0.01)
+                self.frame_event.set()
         cap.release()
 
     def _stream_tof_mock(self):
@@ -205,13 +206,15 @@ class SmartBlindGlassesWinTest:
 
     def _inference_yolo_loop(self):
         while self.running:
+            self.frame_event.wait(timeout=0.1)
+
             frame = None
             with self.frame_lock:
                 if self.current_frame is not None:
                     frame = self.current_frame.copy()
+                self.frame_event.clear()
 
             if frame is None:
-                time.sleep(0.01)
                 continue
 
             # Suy luận model YOLOv8 mẫu
@@ -242,7 +245,6 @@ class SmartBlindGlassesWinTest:
             annotated = results[0].plot() if len(results) > 0 else frame
             with self.frame_lock:
                 self.annotated_frame = annotated
-            time.sleep(0.01)
 
     def _render_window_loop(self):
         print("\n=======================================================")
