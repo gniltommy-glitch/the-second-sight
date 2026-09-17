@@ -1,5 +1,4 @@
 import sys
-import time
 import struct
 import argparse
 import serial
