@@ -1,0 +1,33 @@
+[Unit]
+Description=Second Sight assistive vision
+After=local-fs.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=notify
+NotifyAccess=main
+User=@USER@
+WorkingDirectory=@ROOT@
+ExecStart=@ROOT@/.venv/bin/python @ROOT@/main.py --config @ROOT@/config/pi.json
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONUTF8=1
+Environment=OMP_NUM_THREADS=2
+Environment=OPENBLAS_NUM_THREADS=2
+Environment=MKL_NUM_THREADS=2
+Environment=YOLO_AUTOINSTALL=false
+Restart=always
+RestartSec=5
+WatchdogSec=30
+TimeoutStartSec=120
+TimeoutStopSec=15
+KillMode=control-group
+MemoryAccounting=true
+MemoryHigh=2800M
+MemoryMax=3200M
+NoNewPrivileges=true
+UMask=0077
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

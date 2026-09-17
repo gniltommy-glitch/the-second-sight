@@ -1,0 +1,4 @@
+# Matches best.pt metadata (YOLO26 Segment26, trained with Ultralytics 8.4.138).
+# CPU runtime; install only in the project's virtualenv. See docs/MODELS.md.
+ultralytics==8.4.138
+# NCNN is optional: pip install ncnn after exporting the checkpoint.

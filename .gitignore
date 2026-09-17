@@ -1,0 +1,11 @@
+.venv/
+.tools/
+__pycache__/
+*.pyc
+models/
+*.zip
+*.pt
+*.wav
+*.log
+*.onnx
+*_ncnn_model/

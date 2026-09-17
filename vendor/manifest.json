@@ -1,0 +1,252 @@
+[
+  {
+    "file": "hal/Inc/stm32f4xx_hal.h",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Inc/stm32f4xx_hal.h",
+    "sha256": "6942f40453fee331e026179cfac4c0f24ffe6313fedcb68af9c3382f702dbaf5"
+  },
+  {
+    "file": "hal/Src/stm32f4xx_hal.c",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Src/stm32f4xx_hal.c",
+    "sha256": "e10d4b81df863cc52a9351269a8856cc669122b13c933a54e3a49bb8ec0f62eb"
+  },
+  {
+    "file": "hal/Inc/stm32f4xx_hal_cortex.h",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Inc/stm32f4xx_hal_cortex.h",
+    "sha256": "d96dba22903abda49d66cad29ac0c49357e6a27cf9cb03dfd8c6db71b61a7fca"
+  },
+  {
+    "file": "hal/Src/stm32f4xx_hal_cortex.c",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Src/stm32f4xx_hal_cortex.c",
+    "sha256": "9aaa0f19137d700616bec01a5a806786c24e3f3386120365c5d2addaa4055505"
+  },
+  {
+    "file": "hal/Inc/stm32f4xx_hal_rcc.h",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Inc/stm32f4xx_hal_rcc.h",
+    "sha256": "43104017711b2522c72f5c167aa155bc584b6216f9de57b8a2864ee14701bd58"
+  },
+  {
+    "file": "hal/Src/stm32f4xx_hal_rcc.c",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Src/stm32f4xx_hal_rcc.c",
+    "sha256": "c6c90b44618af21f25346bf8bd2c73ca229b6a5c4790ceb498111716dfd9c13e"
+  },
+  {
+    "file": "hal/Inc/stm32f4xx_hal_rcc_ex.h",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Inc/stm32f4xx_hal_rcc_ex.h",
+    "sha256": "49f0c8068524e1de248738530cff3bbe630dc4784b6e8b5568fbc7e1a154f772"
+  },
+  {
+    "file": "hal/Src/stm32f4xx_hal_rcc_ex.c",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Src/stm32f4xx_hal_rcc_ex.c",
+    "sha256": "a867e0b370950d34d73b98784db5b5a26871383ed0a4a7a8036706f906de7453"
+  },
+  {
+    "file": "hal/Inc/stm32f4xx_hal_gpio.h",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Inc/stm32f4xx_hal_gpio.h",
+    "sha256": "0b40fc83363b64d3c7396a202be7a914ceaa7735ab0fa81d566ed320102b23fb"
+  },
+  {
+    "file": "hal/Src/stm32f4xx_hal_gpio.c",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Src/stm32f4xx_hal_gpio.c",
+    "sha256": "408908b15477b6ce2b0b9703caabcb053293d98f2f109d6e6940e076a6a3902b"
+  },
+  {
+    "file": "hal/Inc/stm32f4xx_hal_dma.h",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Inc/stm32f4xx_hal_dma.h",
+    "sha256": "71c38dfd65c5415b388375147e5317c7ac018b39893d6fd0ac1c897f4313329c"
+  },
+  {
+    "file": "hal/Src/stm32f4xx_hal_dma.c",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Src/stm32f4xx_hal_dma.c",
+    "sha256": "a345a1b1fe0221c827d5ad21d5a0f5387296bc2c075e06e5b8539c23da5678e4"
+  },
+  {
+    "file": "hal/Inc/stm32f4xx_hal_dma_ex.h",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Inc/stm32f4xx_hal_dma_ex.h",
+    "sha256": "3ee15423d73ac394de39e7b65821775966389b13749ff0849894548ab6968676"
+  },
+  {
+    "file": "hal/Src/stm32f4xx_hal_dma_ex.c",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Src/stm32f4xx_hal_dma_ex.c",
+    "sha256": "90cafb5a5b17a46b478770ef4abdc9a641cb395419abbb80f288138a63d44582"
+  },
+  {
+    "file": "hal/Inc/stm32f4xx_hal_i2c.h",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Inc/stm32f4xx_hal_i2c.h",
+    "sha256": "4f14fcdc4967efd8ed64d95ef0269ff6acdc0db0864df1bde3e95c427d8f9fbf"
+  },
+  {
+    "file": "hal/Src/stm32f4xx_hal_i2c.c",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Src/stm32f4xx_hal_i2c.c",
+    "sha256": "1e0ba175bf0ec87ddabca6d1796d9fd45cf9698d79cccf5691974745f96e3ef3"
+  },
+  {
+    "file": "hal/Inc/stm32f4xx_hal_i2c_ex.h",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Inc/stm32f4xx_hal_i2c_ex.h",
+    "sha256": "0f7dcff0dbfd058691564f75803353ad0c4b5ef756b0f9915f4d2f9f78e1716c"
+  },
+  {
+    "file": "hal/Src/stm32f4xx_hal_i2c_ex.c",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Src/stm32f4xx_hal_i2c_ex.c",
+    "sha256": "1d3dbcd648b379ef0e109646bc37d0140c16381c3d0f74c610a112fd84546846"
+  },
+  {
+    "file": "hal/Inc/stm32f4xx_hal_i2s.h",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Inc/stm32f4xx_hal_i2s.h",
+    "sha256": "7655265759db94e15424c874d23cc0a9f82011045ae9a07155409be4fe98c16a"
+  },
+  {
+    "file": "hal/Src/stm32f4xx_hal_i2s.c",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Src/stm32f4xx_hal_i2s.c",
+    "sha256": "67fe3568a98c9997e3e317b40afa0c4a19b9fc8d7ae0d8772dd863a389ce9e81"
+  },
+  {
+    "file": "hal/Inc/stm32f4xx_hal_i2s_ex.h",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Inc/stm32f4xx_hal_i2s_ex.h",
+    "sha256": "34ca804e929ab5b3a49f5f4eb66897a8c3623aec4ac5913aa6ccaf5347afc2db"
+  },
+  {
+    "file": "hal/Src/stm32f4xx_hal_i2s_ex.c",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Src/stm32f4xx_hal_i2s_ex.c",
+    "sha256": "d2862b2ab3ce3a4776c75c6359988faadc04c6f6c13c5c75a0273a9898a4ac59"
+  },
+  {
+    "file": "hal/Inc/stm32f4xx_hal_flash.h",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Inc/stm32f4xx_hal_flash.h",
+    "sha256": "10be06c6e06fcf4eb11e236641948aed861898fea235c606ae221fa72bc46638"
+  },
+  {
+    "file": "hal/Src/stm32f4xx_hal_flash.c",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Src/stm32f4xx_hal_flash.c",
+    "sha256": "f30415c546330c72e702e1eefafc8429576fabfbf1cb0b1711510189771309d2"
+  },
+  {
+    "file": "hal/Inc/stm32f4xx_hal_flash_ex.h",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Inc/stm32f4xx_hal_flash_ex.h",
+    "sha256": "7c206f5dbed3c147a6f090ab808933132a1b06b8339623ad7174fd0a222e981c"
+  },
+  {
+    "file": "hal/Src/stm32f4xx_hal_flash_ex.c",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Src/stm32f4xx_hal_flash_ex.c",
+    "sha256": "4f4e11c76c64208b98556a551e680dd7eed9a78206add14cabb8b4462f463941"
+  },
+  {
+    "file": "hal/Inc/stm32f4xx_hal_pwr.h",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Inc/stm32f4xx_hal_pwr.h",
+    "sha256": "d6f6abc4af3d5a1ca59d886f5a9154e44f257a43af77c7f18173f160825ed6b5"
+  },
+  {
+    "file": "hal/Src/stm32f4xx_hal_pwr.c",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Src/stm32f4xx_hal_pwr.c",
+    "sha256": "d779468a95df34421bf6c8417136a79aa910753381a644afa9ed10b185ae18b5"
+  },
+  {
+    "file": "hal/Inc/stm32f4xx_hal_pwr_ex.h",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Inc/stm32f4xx_hal_pwr_ex.h",
+    "sha256": "1794b88c5e080858c0205a2e94340c0250ac9171b3a3f01cad6d050005a1b09d"
+  },
+  {
+    "file": "hal/Src/stm32f4xx_hal_pwr_ex.c",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Src/stm32f4xx_hal_pwr_ex.c",
+    "sha256": "4409dddc0d2019f918d0ddebecf659f06d4de3f9aa28566621a16ea47203331f"
+  },
+  {
+    "file": "hal/Inc/stm32f4xx_hal_def.h",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Inc/stm32f4xx_hal_def.h",
+    "sha256": "c8eb3f7b393f8c5a0c32e16ccfa101c83ddb59e96bd42239b8a5c5d4da83e97f"
+  },
+  {
+    "file": "hal/Inc/stm32f4xx_hal_gpio_ex.h",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Inc/stm32f4xx_hal_gpio_ex.h",
+    "sha256": "4091beefc5bf8b250f376d400f43ca028ef7378e1c7ba5c9eb5de64ec74231c0"
+  },
+  {
+    "file": "hal/Inc/stm32f4xx_hal_flash_ramfunc.h",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Inc/stm32f4xx_hal_flash_ramfunc.h",
+    "sha256": "f18a6eabc99f56483566f9231ca33c780afa98bc93929e60bb419b5e544eee2a"
+  },
+  {
+    "file": "hal/Inc/Legacy/stm32_hal_legacy.h",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/Inc/Legacy/stm32_hal_legacy.h",
+    "sha256": "ea1d8cb835b5898c17b227f0e1d72aa6a9d0d81cdc0baaa8da988be57fd63eb7"
+  },
+  {
+    "file": "device/Include/stm32f4xx.h",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/cmsis-device-f4/v2.6.10/Include/stm32f4xx.h",
+    "sha256": "13a76b267fceb37400f14d42a4c4ed3189e34b9cfb059c1c70b0419fda4dfb35"
+  },
+  {
+    "file": "device/Include/stm32f411xe.h",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/cmsis-device-f4/v2.6.10/Include/stm32f411xe.h",
+    "sha256": "db64e4d1dccfcae0e8ea1618ad372ca88c8367f1f93f21b2083701dedec2f3cb"
+  },
+  {
+    "file": "device/Include/system_stm32f4xx.h",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/cmsis-device-f4/v2.6.10/Include/system_stm32f4xx.h",
+    "sha256": "02c067d5a135f540c03215dc834b1e60a97bbd4e55bfd3994b0c82a15ea3012a"
+  },
+  {
+    "file": "device/system_stm32f4xx.c",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/cmsis-device-f4/v2.6.10/Source/Templates/system_stm32f4xx.c",
+    "sha256": "77362913e1fc29a495408fda17dbb2d62be50b8e7c7c1e60698d0777c187be48"
+  },
+  {
+    "file": "device/gcc/startup_stm32f411xe.s",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/cmsis-device-f4/v2.6.10/Source/Templates/gcc/startup_stm32f411xe.s",
+    "sha256": "8289f87711423a048339cf8b54fd1ed8a9cdd23c19176132ae6cd371119b0060"
+  },
+  {
+    "file": "core/core_cm4.h",
+    "url": "https://raw.githubusercontent.com/ARM-software/CMSIS_5/5.9.0/CMSIS/Core/Include/core_cm4.h",
+    "sha256": "f5b63d52dd1557b15ca414cb59c264f595a7b5669db2a5878dffe22f4caedc8c"
+  },
+  {
+    "file": "core/cmsis_version.h",
+    "url": "https://raw.githubusercontent.com/ARM-software/CMSIS_5/5.9.0/CMSIS/Core/Include/cmsis_version.h",
+    "sha256": "184c19fd3ee73632edf35a0b4d49cd48be75fbf49e6ccb19d9db05fa83bea4b3"
+  },
+  {
+    "file": "core/cmsis_compiler.h",
+    "url": "https://raw.githubusercontent.com/ARM-software/CMSIS_5/5.9.0/CMSIS/Core/Include/cmsis_compiler.h",
+    "sha256": "b51963d271c1571ca3463654c76aa7ea50c4eac5d0a2710df10414ac64d9e0f8"
+  },
+  {
+    "file": "core/cmsis_gcc.h",
+    "url": "https://raw.githubusercontent.com/ARM-software/CMSIS_5/5.9.0/CMSIS/Core/Include/cmsis_gcc.h",
+    "sha256": "43bfd1fe69fbbc2ca70aaf7d43cc3e20f16e0c7f66e1bdef9b51af6dc14b2617"
+  },
+  {
+    "file": "core/mpu_armv7.h",
+    "url": "https://raw.githubusercontent.com/ARM-software/CMSIS_5/5.9.0/CMSIS/Core/Include/mpu_armv7.h",
+    "sha256": "29206b52ee02290ed6f5a5415ebd4187de802cf176d9b3cb844390d8e5571372"
+  },
+  {
+    "file": "hal/LICENSE.md",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32f4xx-hal-driver/v1.8.3/LICENSE.md",
+    "sha256": "376c82bcef0be563bf59b93d05cfdd4b6295e4660b55b31dd8a883bf1d6637f7"
+  },
+  {
+    "file": "device/LICENSE.md",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/cmsis-device-f4/v2.6.10/LICENSE.md",
+    "sha256": "dadb755f51d36614173b28c5790cb4a991e8f4cc822e5b634fd66a4f4145824d"
+  },
+  {
+    "file": "core/LICENSE.txt",
+    "url": "https://raw.githubusercontent.com/ARM-software/CMSIS_5/5.9.0/LICENSE.txt",
+    "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1"
+  },
+  {
+    "file": "references/dfrobot/DFRobot_MatrixLidar.cpp",
+    "url": "https://raw.githubusercontent.com/DFRobot/DFRobot_MatrixLidar/master/DFRobot_MatrixLidar.cpp",
+    "sha256": "4fa44c76baf2f491c987bae5eacac8c93c363b93240cdeabcceebe577190d54b"
+  },
+  {
+    "file": "references/dfrobot/DFRobot_MatrixLidar.h",
+    "url": "https://raw.githubusercontent.com/DFRobot/DFRobot_MatrixLidar/master/DFRobot_MatrixLidar.h",
+    "sha256": "acc5d21d0380acd5d82ae0b9f43af310cde70976dd4f5bc1f2386511a34499eb"
+  },
+  {
+    "file": "references/dfrobot/LICENCE",
+    "url": "https://raw.githubusercontent.com/DFRobot/DFRobot_MatrixLidar/master/LICENCE",
+    "sha256": "b49d94d634c01d5e54386bccd708902b8c27126a8ce498a3177c55f5264291b0"
+  }
+]

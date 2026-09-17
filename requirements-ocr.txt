@@ -1,0 +1,6 @@
+# Baseline OCR for Raspberry Pi OS ARM64. The native executable and Vietnamese
+# data are installed with apt: tesseract-ocr tesseract-ocr-vie tesseract-ocr-eng.
+pytesseract==0.3.13
+# Optional Paddle/VietOCR dependencies are deliberately separate; ARM wheels
+# must be verified for the selected OS/Python before changing ocr.backend.
+# See docs/MODELS.md for exact commands and locally prepared model assets.

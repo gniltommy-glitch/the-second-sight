@@ -1,0 +1,61 @@
+{
+  "project_root": "..",
+  "camera": {"backend": "picamera2", "width": 1280, "height": 720, "fps": 15, "device": 0},
+  "serial": {
+    "port": "/dev/ttyAMA0", "baudrate": 1000000,
+    "ack_timeout": 0.2, "retries": 4, "status_timeout": 3.0, "tof_timeout": 0.35
+  },
+  "yolo": {"path": "best.pt", "task": "segment", "imgsz": 416, "confidence": 0.45, "iou": 0.5, "threads": 2},
+  "ocr": {
+    "backend": "tesseract", "confidence": 0.55, "max_chars": 1800, "max_lines": 40,
+    "region_mode": "main", "max_side": 1600, "threads": 2,
+    "tesseract_lang": "vie+eng", "tesseract_psm": 6, "tesseract_timeout_s": 40,
+    "det_model_name": "PP-OCRv5_mobile_det", "rec_model_name": "latin_PP-OCRv5_mobile_rec",
+    "det_model_dir": "models/ocr/PP-OCRv5_mobile_det",
+    "rec_model_dir": "models/ocr/latin_PP-OCRv5_mobile_rec",
+    "vietocr_config": "models/ocr/vgg_transformer.yml", "vietocr_weights": "models/ocr/transformerocr.pth"
+  },
+  "tts": {
+    "model": "models/piper/vi_VN-vais1000-medium.onnx",
+    "queue_size": 3, "cache_bytes": 2000000, "worker_timeout_seconds": 90, "threads": 1
+  },
+  "navigation": {
+    "confidence": 0.45, "max_details": 4,
+    "labels": {
+      "sidewalk": ["sidewalk", "walkway", "pavement", "footpath"],
+      "road": ["road", "roadway", "vehicle_lane"],
+      "zebra": ["zebra_crossing", "crosswalk", "pedestrian_crossing"],
+      "pedestrian_red": ["pedestrian_red", "pedestrian_light_red"],
+      "pedestrian_green": ["pedestrian_green", "pedestrian_light_green"],
+      "ignore": ["traffic_light", "pedestrian_light"]
+    },
+    "class_names": {
+      "building": "tòa nhà", "cabinet": "tủ", "curb_obstacle": "gờ bó vỉa",
+      "fence": "hàng rào", "person": "người", "pole": "cột", "sign": "biển báo",
+      "street_obstacle": "vật cản trên đường", "tree": "cây", "vehicle": "xe"
+    },
+    "cash_labels": {
+      "vnd_1000": "một nghìn đồng", "vnd_2000": "hai nghìn đồng", "vnd_5000": "năm nghìn đồng",
+      "vnd_10000": "mười nghìn đồng", "vnd_20000": "hai mươi nghìn đồng",
+      "vnd_50000": "năm mươi nghìn đồng", "vnd_100000": "một trăm nghìn đồng",
+      "vnd_200000": "hai trăm nghìn đồng", "vnd_500000": "năm trăm nghìn đồng"
+    },
+    "lane": {"sidewalk_coverage": 0.70, "obstacle_margin": 0.06, "min_y": 0.55},
+    "crossing": {"min_observations": 3, "stable_seconds": 0.6, "max_gap_seconds": 1.0}
+  },
+  "tof": {
+    "max_age_seconds": 0.35, "min_mm": 100, "max_mm": 4000,
+    "min_support": 2, "bbox_inset": 0.1, "emergency_mm": 700,
+    "emergency_zones": [27, 28, 35, 36], "calibrated": false,
+    "projection": {
+      "mode": "homography", "matrix": null, "validated_range_mm": [500, 3000],
+      "rotate_quarters": 0, "flip_x": false, "flip_y": false
+    }
+  },
+  "runtime": {
+    "model_load_timeout": 90, "yolo_timeout": 15, "ocr_timeout": 60,
+    "ocr_speech_timeout": 300, "frame_max_age": 1.0, "camera_timeout": 5.0,
+    "result_max_age": 1.5, "fusion_max_skew": 0.15,
+    "max_inference_fps": 5, "repeat_seconds": 5
+  }
+}

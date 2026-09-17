@@ -1,0 +1,1278 @@
+
+=== PDF PAGE 1 ===
+Features
+• Fast and accurate multizone distance ranging sensor with 90° wide FoV
+– 60° x 60° square field of view (FoV) (90° diagonal)
+– Multizone ranging output with either 4x4 or 8x8 separate zones
+– Autonomous low-power mode with interrupt programmable threshold to 
+wake up the host
+– Up to 350 cm ranging
+– Multitarget detection and distance measurement in each zone
+– 60 Hz frame rate capability
+– Histogram processing and algorithmic compensation minimizes or 
+removes the impact of cover glass crosstalk
+– Motion indicator for each zone to show if targets have moved and how 
+they have moved
+• Fully integrated miniature module
+– Emitter: 940 nm invisible light vertical-cavity surface-emitting laser 
+(VCSEL) and integrated analog driver
+– Diffractive optical elements (DOE) on both transmitter and receiver 
+enabling square FoV
+– Receiving array of single photon avalanche diodes (SPADs)
+– Low-power microcontroller running firmware
+– Size: 6.4 x 3.0 x 1.6 mm
+• Easy integration
+– Single reflowable component
+– Flexible power supply options, single 3.3 V, or 2.8 V operation or 
+combination of either 3.3 V or 2.8 V AVDD with 1.8 V IOVDD
+– Compatible with a wide range of cover glass materials
+– Pin-to-pin and driver compatible with VL53L5CX
+Application
+• Ultrawide FoV and multizone scanning allows content management (load in 
+trucks, tanks, waste bins)
+• Applications requiring ultrawide FoV, like smart speakers, vacuum cleaners 
+(three sensors can cover 180° x 60° FoV)
+• Gesture recognition with wide field of detection
+• Devices requiring ultrawide FoV for user detection to wake-up devices (smart 
+buildings, smart lighting)
+• Keystone correction for video projectors
+• Robotics applications (SLAM, wall tracking, small object detection, cliff 
+prediction, floor type recognition)
+• Augmented reality/virtual reality (AR/VR) enhancement. Dual camera 
+stereoscopy and 3D depth assistance thanks to multizone distance 
+measurement
+• IoT (user and object detection)
+• Video focus tracking. 60 Hz ranging allows optimization of continuous focus 
+algorithm.
+Product status link
+VL53L7CX
+Time-of-Flight 8x8 multizone ranging sensor with 90° FoV 
+VL53L7CX
+Datasheet
+DS13865 - Rev 8 - September 2024
+For further information contact your local STMicroelectronics sales office.
+www.st.com
+
+=== PDF PAGE 2 ===
+Description
+Specially designed for applications requiring an ultrawide FoV, the VL53L7CX Time-of-Flight sensor offers a 90° 
+diagonal FoV. Based on ST's FlightSense technology, the VL53L7CX incorporates an efficient metasurface lens 
+(DOE) placed on the laser emitter enabling the projection of a 60° x 60° square FoV onto the scene.
+Its multizone capability provides a matrix of 8x8 zones (64 zones) and can work at fast speeds (60 Hz) up to 
+350 cm.
+Thanks to the autonomous mode with programmable distance threshold combined to the ultrawide FoV, the 
+VL53L7CX is perfect for any application requiring low-power user detection. ST's patented algorithms and 
+innovative module construction allow the VL53L7CX to detect, in each zone, multiple objects within the FoV with 
+depth understanding. ST histogram algorithms ensure cover glass crosstalk immunity beyond 60 cm.
+Derived from the VL53L5CX, the pinouts and drivers of both sensors are compatible, which ensures a simple 
+migration from one sensor to the other.
+Like all Time-of-Flight (ToF) sensors based on ST's FlightSense technology, the VL53L7CX records, in each zone, 
+an absolute distance regardless of the target color and reflectance.
+Housed in a miniature reflowable package that integrates a SPAD array, the VL53L7CX achieves the best ranging 
+performance in various ambient lighting conditions, and for a wide range of cover glass materials.
+All of ST's ToF sensors integrate a VCSEL that emits a fully invisible 940 nm IR light, which is totally safe for the 
+eyes (Class 1 certification).
+The VL53L7CX is the perfect sensor for any application requiring ultrawide FoV like robotics, smart speakers, 
+video projectors, content management. The combination of the multizone capability and the 90° FoV can enhance 
+new use-cases like gesture recognition, SLAM for robotics, and low power system activation for smart building.
+VL53L7CX
+DS13865 - Rev 8 page 2/41
+
+=== PDF PAGE 3 ===
+1 Acronyms and abbreviations
+Acronym/abbreviation Definition
+AF autofocus
+API application programming interface
+AR/VR augmented reality/virtual reality
+DOE diffractive optical element
+ESD electrostatic discharge
+FoV field of view
+FoI field of illumination
+GPIO general-purpose input/output
+HP high power
+I2C inter-integrated circuit (serial bus)
+LAF laser autofocus
+LGA land grid array
+LP low power
+NVM nonvolatile memory
+PCB printed circuit board
+PDAF phase detection autofocus
+PLL phase-locked loop
+PVT process, voltage, and temperature
+POR power on reset
+RAM random-access memory
+SPAD single photon avalanche diode
+SW software
+ToF Time-of-Flight
+UI user interface
+UM user manual
+VCSEL vertical-cavity surface-emitting laser
+VL53L7CX
+Acronyms and abbreviations
+DS13865 - Rev 8 page 3/41
+
+=== PDF PAGE 4 ===
+2 Product overview
+2.1 Technical specifications
+Table 1. Technical specifications
+Feature Details
+Package Optical LGA16
+Size 6.4 x 3.0 x 1.6 mm
+Ranging 2 to 350 cm per zone
+Operating voltage
+IOVDD: 1.8 or 2.8 V or 3.3 V
+AVDD: 2.8 V or 3.3 V
+Operating temperature -30 to 85°C
+Sample rate Up to 60 Hz
+Infrared emitter 940 nm
+I2C interface I2C: serial bus, address: 0x52
+Operating ranging mode Continuous or Autonomous (see UM3038 for more information)
+2.2 Field of view
+Rx (or collector) exclusion zone includes all modules assembly tolerances and is used to define the cover glass 
+dimensions. The cover glass opening must be equal to or wider than the exclusion zone.
+The detection volume represents the applicative or system FoV in which a target is detected, and a distance 
+measured. It is determined by the Rx lens or the Rx aperture, and is narrower than the exclusion zone.
+Figure 1. System FoV and exclusion zone description (not to scale)
+Table 2. FoV angles
+Horizontal Vertical Diagonal
+Detection volume 60o 60o 90o
+Collector exclusion zone 74o 74o 116o
+Note: Detection volume depends on the environment and sensor configuration as well as target distance, reflectance, 
+ambient light level, sensor resolution, sharpener, ranging mode, and integration time.
+VL53L7CX
+Product overview
+DS13865 - Rev 8 page 4/41
+
+=== PDF PAGE 5 ===
+Note: The detection volume of Table 2. FoV angles has been measured with a white 88% reflectance perpendicular 
+target in full FoV, located at 1 m from the sensor, without ambient light (dark conditions), with an 8x8 resolution 
+and 14% sharpener (default value), in continuous mode at 15 Hz.
+2.3 Field of illumination
+The VCSEL field of illumination (FoI) is shown in the figure below. The relative emitted signal power depends on 
+the FoI angle, and corresponds to:
+• 73.8° x 73.8° considering a beam with 75% signal from maximum
+• 80.8° x 80.8° considering a beam with 10% signal from maximum
+Figure 2. VL53L7CX FoI
+VL53L7CX
+Product overview
+DS13865 - Rev 8 page 5/41
+
+=== PDF PAGE 6 ===
+2.4 System block diagram
+Figure 3. VL53L7CX block diagram
+ToF module
+ToF silicon
+Single Photon
+Avalanche Diode (SPAD)
+Detection array
+Non Volatile
+Memory
+ROM
+RAM
+Microcontroller
+Advanced
+Ranging Core
+VCSEL Driver
+940nm
+IR+ IR-
+GNDSCL
+AVDD
+IOVDDINT
+SDA
+2.5 Device pinout
+The figure below shows the pinout of the VL53L7CX.
+Figure 4. VL53L7CX pinout (bottom view)
+The VL53L7CX pin description is given in the table below.
+VL53L7CX
+Product overview
+DS13865 - Rev 8 page 6/41
+
+=== PDF PAGE 7 ===
+Table 3. VL53L7CX pin description
+Pin number Signal name Signal type Signal description
+A1 I2C_RST Digital input
+I2C interface reset pin, active high. Toggle this 
+pin from 0 to 1, then back to 0 to reset the I2C 
+target. Connect to GND via a 47 kΩ resistor.
+A2 RSVD4 Reserved Connect to ground
+A3 INT Digital input/output 
+(I/O)
+Interrupt output, defaults to opendrain output 
+(tristate), 47 kΩ pullup resistor to IOVDD required
+A4 IOVDD Power 1.8 V, 2.8 V or 3.3 V supply for digital core and 
+I/O supply
+A5 LPn Digital input
+Comms enable. Drive this pin to logic 0 to 
+disable the I2C comms. Drive this pin to logic 1 to 
+enable I2C comms. Typically used when it is 
+required to change the I2C address in 
+multidevice systems. A 47 kΩ pullup resistor to 
+IOVDD is required.
+A6 RSVD1 Reserved Connect to ground
+A7 RSVD2 Reserved Connect to ground
+B1 AVDD Power 2.8 V or 3.3 V analog and VCSEL supply
+B4 THERMALPAD Ground Connect to a ground plane to allow good thermal 
+conduction
+B7 AVDD Power 2.8 V or 3.3 V analog and VCSEL supply
+C1 GND Ground Ground
+C2 RSVD6 Reserved
+General purpose I/O, defaults to opendrain 
+output (tristate), 47 kΩ pullup resistor to IOVDD 
+required
+C3 SDA Digital I/O Data (bidirectional), 2.2 kΩ pullup resistor to 
+IOVDD required
+C4 SCL Digital input Clock (input), 2.2 kΩ pullup resistor to IOVDD 
+required
+C5 RSVD5 Reserved Do not connect
+C6 RSVD3 Reserved Connect to ground
+C7 GND Ground Ground
+Note: The THERMALPAD pin has to be connected to ground (for more information refer to AN5853).
+Note: All digital signals must be driven to the IOVDD level.
+Note: Toggling the I2C_RST pin resets the sensor I2C communication only. It does not reset the sensor itself. To reset 
+the sensor, refer to the sensor reset management procedure (UM3038).
+VL53L7CX
+Product overview
+DS13865 - Rev 8 page 7/41
+
+=== PDF PAGE 8 ===
+2.6 Application schematic
+The figures below show the application schematic of the VL53L7CX with different IOVDD and AVDD 
+combinations.
+Figure 5. Typical application schematic
+6.3V
+4.7uF
+10V
+100nF
+R7
+47k
+47k
+GNDC1
+RSVD3 C6RSVD2 A7RSVD1 A6
+SDAC3 RSVD5 C5
+GNDC7
+AVDD
+B1
+AVDD B7
+RSVD6 C2
+LPnA5
+IOVDD A4
+SCLC4
+RSVD4 A2
+I2C_RSTA1
+THERMAL PADB4
+U2
+ToF sensor
+47k
+AVDD IOVDD
+IOVDD
+IOVDD
+Host MCU
+2.2  k2.2  k 47k
+A3 INT
+IOVDD = [1.8 V, 2.8 V, 3.3 V]
+AVDD = [2.8 V, 3.3 V]
+Note: Capacitors on the external supplies (AVDD and IOVDD) should be placed as close as possible to the module 
+pins.
+VL53L7CX
+Product overview
+DS13865 - Rev 8 page 8/41
+
+=== PDF PAGE 9 ===
+3 Functional description
+3.1 Software interface
+This section shows the software interface of the device. The host customer application controls the VL53L7CX 
+using an application programming interface (API). The API implementation is delivered to the customer as a driver 
+(C code and reference Linux® driver). The driver provides the customer application with a set of high-level 
+functions. They allow control of the VL53L7CX firmware such as device initialization, ranging start/stop, and mode 
+select.
+Figure 6. VL53L7CX system functional description
+3.2 Power state machine
+Figure 7. Power state machine
+Table 4. Power state description
+Device state Description
+LP idle
+Low power idle state with data retention
+RAM and register content retained
+Allows fast resume to HP idle
+I2C communication is disabled if using LPn
+HP idle
+High power idle state
+Device needs to be in HP idle state to start ranging
+Power-up state
+Ranging
+Full operation
+VCSEL is active (pulsing)
+VL53L7CX
+Functional description
+DS13865 - Rev 8 page 9/41
+
+=== PDF PAGE 10 ===
+3.3 Power up sequence
+The recommended power up sequence is shown in the figure below. When powering up the device, the IOVDD 
+supply should be applied at the same time or after AVDD. When removing power, the AVDD supply should be 
+removed at the same time or after IOVDD.
+Note: Avoid powering IOVDD while AVDD is unpowered to prevent increased leakage current.
+Figure 8. Power up sequence
+Table 5. Power up timing table
+Time Description Min.
+t1 IOVDD rises after AVDD 0 s
+t2 IOVDD falls before AVDD 0 s
+VL53L7CX
+Functional description
+DS13865 - Rev 8 page 10/41
+
+=== PDF PAGE 11 ===
+3.3.1 Power up slew
+To ensure proper operation of the module, the following minimum slew rates on the supplies must be met for 
+correct operation of the power on reset (POR) circuitry. The POR circuitry triggers at 0.9 V, but the supplies 
+should reach their operation levels in accordance with the slew rates listed in the table below.
+Figure 9. Power up slew
+Note: The minimum reset time is the minimum time required for the device ROM to load and boot up after IOVDD 
+reaches the POR rising threshold. The supply must have reached the minimum operating level (1.6 V) within this 
+time.
+Note: The minimum slew rate on the IOVDD is the same regardless of 1.8 V or 2.8 V operation.
+Note: The AVDD rise time is determined by the internal analog levels, which must be stable for correct operation.
+Table 6. Supply slew rate minimum limits
+Supply status AVDD slew IOVDD slew
+Start together 0.001 V/µs 0.012 V/µs
+AVDD stable followed by IOVDD — 0.012 V/µs
+IOVDD stable followed by AVDD 0.001 V/µs —
+3.3.2 Power up and I2C access
+For correct operation of the device, the I2C interface assumes that the power level has reached 1.62 V.
+VL53L7CX
+Functional description
+DS13865 - Rev 8 page 11/41
+
+=== PDF PAGE 12 ===
+4 I2C control interface
+This section specifies the control interface. The I2C interface uses two signals: serial data line (SDA) and serial 
+clock line (SCL). Each device connected to the bus uses a unique address and a simple controller/target 
+relationships exists.
+Both SDA and SCL lines are connected to a positive supply voltage using pull-up resistors located on the host. 
+Lines are only actively driven low. A high condition occurs when lines are floating and the pull-up resistors pull 
+lines up. When no data is transmitted both lines are high.
+Clock signal (SCL) generation is performed by the controller device. The controller device initiates data transfer. 
+The I2C bus on the VL53L7CX has a maximum speed of 1 Mbits/s and uses a device 8-bit address of 0x52.
+Figure 10. Data transfer protocol
+Information is packed in 8-bit packets (bytes) always followed by an acknowledge bit, Ac for VL53L7CX 
+acknowledge and Am for controller acknowledge (host bus controller). The internal data are produced by 
+sampling SDA at a rising edge of SCL. The external data must be stable during the high period of SCL. The 
+exceptions to this are start (S) or stop (P) conditions when SDA falls or rises respectively, while SCL is high.
+A message contains a series of bytes preceded by a start condition and followed by either a stop or repeated start 
+(another start condition but without a preceding stop condition) followed by another message. The first byte 
+contains the device address (0x52) and also specifies the data direction. If the least significant bit is low (that is, 
+0x52) the message is a controller-write-to-the-target. If the lsb is set (that is, 0x53) then the message is a 
+controller-read-from-the-target.
+Figure 11. VL53L7CX I2C device address: 0x52
+All serial interface communications with the ToF sensor must begin with a start condition. The VL53L7CX module 
+acknowledges the receipt of a valid address by driving the SDA wire low. The state of the read/write bit (lsb of the 
+address byte) is stored and the next byte of data, sampled from SDA, can be interpreted. During a write 
+sequence, the second byte received provides a 16-bit index, which points to one of the internal 8-bit registers.
+VL53L7CX
+I2C control interface
+DS13865 - Rev 8 page 12/41
+
+=== PDF PAGE 13 ===
+Figure 12. VL53L7CX data format (write)
+As data are received by the target, they are written bit by bit to a serial/parallel register. After each data byte has 
+been received by the target, an acknowledge is generated, the data are then stored in the internal register 
+addressed by the current index.
+During a read message, the contents of the register addressed by the current index is read out in the byte 
+following the device address byte. The contents of this register are parallel loaded into the serial/parallel register 
+and clocked out of the device by the falling edge of SCL.
+Figure 13. VL53L7CX data format (read)
+At the end of each byte, in both read and write message sequences, an acknowledge is issued by the receiving 
+device (that is, the VL53L7CX for a write and the host for a read).
+A message can only be terminated by the bus controller, either by issuing a stop condition or by a negative 
+acknowledge (that is, not pulling the SDA line low) after reading a complete byte during a read operation.
+The interface also supports autoincrement indexing. After the first data byte has been transferred, the index is 
+automatically incremented by 1. The controller can therefore send data bytes continuously to the target until the 
+target fails to provide an acknowledge or the controller terminates the write communication with a stop condition. 
+If the autoincrement feature is used, the controller does not have to send address indexes to accompany the data 
+bytes.
+Figure 14. VL53L7CX data format (sequential write)
+VL53L7CX
+I2C control interface
+DS13865 - Rev 8 page 13/41
+
+=== PDF PAGE 14 ===
+Figure 15. VL53L7CX data format (sequential read)
+4.1 I2C interface - timing characteristics
+Timing characteristics are shown in the tables below. Refer to the figure below for an explanation of the 
+parameters used.
+Timings are given for all process, voltage, and temperature (PVT) conditions.
+Table 7. I2C interface - timing characteristics for fast mode plus (1 MHz)
+Symbol Parameter Minimum Typical Maximum Unit
+FI2C Operating frequency 0 — 1000 kHz
+tLOW Clock pulse width low 0.5 — — µs
+tHIGH Clock pulse width high 0.26 — — µs
+tSP
+Pulse width of spikes, which are 
+suppressed by the input filter — — 50 ns
+tBUF
+Bus free time between 
+transmissions 0.5 — — µs
+tHD.STA Start hold time 0.26 — — µs
+tSU.STA Start setup time 0.26 — — µs
+tHD.DAT Data in hold time 0 — 0.9 µs
+tSU.DAT Data in setup time 50 — — ns
+tR SCL/SDA rise time — — 120 ns
+tF SCL/SDA fall time — — 120 ns
+tSU.STO Stop setup time 0.26 — — µs
+Ci/o Input/output capacitance (SDA) — — 10 pF
+Cin Input capacitance (SCL) — — 4 pF
+CL Load capacitance — 140 550 pF
+VL53L7CX
+I2C control interface
+DS13865 - Rev 8 page 14/41
+
+=== PDF PAGE 15 ===
+Table 8. I2C interface - timing characteristics for fast mode (400 kHz)
+Symbol Parameter Minimum Typical Maximum Unit
+FI2C Operating frequency 0 — 400 kHz
+tLOW Clock pulse width low 1.3 — — µs
+tHIGH Clock pulse width high 0.6 — — µs
+tSP
+Pulse width of spikes that are 
+suppressed by the input filter — — 50 ns
+tBUF
+Bus free time between 
+transmissions 1.3 — — µs
+tHD.STA Start hold time 0.26 — — µs
+tSU.STA Start setup time 0.26 — — µs
+tHD.DAT Data in hold time 0 — 0.9 µs
+tSU.DAT Data in setup time 50 — — ns
+tR SCL/SDA rise time — — 300 ns
+tF SCL/SDA fall time — — 300 ns
+tSU.STO Stop setup time 0.6 — — µs
+Ci/o Input/output capacitance (SDA) — — 10 pF
+Cin Input capacitance (SCL) — — 4 pF
+CL Load capacitance — 125 400 pF
+Figure 16. I2C timing characteristics
+          
+SDA
+SCL
+tHD.STA
+tR
+tHIGH
+tF
+tSU.DATtHD.DAT tSU.STA tSU.STO
+...
+...
+tHD.STAtLOWtBUF
+stopstartstop start
+VIH
+VIL
+VIH
+VIL
+VL53L7CX
+I2C control interface
+DS13865 - Rev 8 page 15/41
+
+=== PDF PAGE 16 ===
+5 Thermal characteristics
+5.1 Absolute maximum rating (TSTG)
+Warning: Stresses above those listed in the following table may cause permanent damage to the 
+device. These are stress ratings only. Functional operation of the device is not implied at 
+these or any other conditions above those indicated in the operational sections of the 
+specification. Exposure to absolute maximum rating conditions for extended periods may 
+affect device reliability.
+The storage temperature (TSTG) is the ambient temperature at which the device can be stored with no voltage 
+applied.
+Table 9. Absolute maximum rating conditions
+Parameter Min. Max. Unit
+Storage temperature (TSTG) -40 125 °C
+5.2 Ambient operating temparature
+The ambient operating temperature is the temperature at which the device may be powered and can operate 
+without any damage.
+Table 10. Recommended operating temperature
+Parameter Min. Max. Unit
+Ambient operating temperature -30 85 °C
+VL53L7CX
+Thermal characteristics
+DS13865 - Rev 8 page 16/41
+
+=== PDF PAGE 17 ===
+6 Electrical characteristics
+6.1 Absolute maximum ratings
+Table 11. Absolute maximum ratings
+Parameter Min. Typ. Max. Unit
+AVDD, IOVDD -0.5 — 3.6
+V
+SCL, SDA, LPn, INT, and I2C_RST -0.5 — 3.6
+Note: Stresses above those listed in Section 2: Product overview may cause permanent damage to the device. This is 
+a stress rating only. Functional operation of the device is not implied at these, or any other conditions above 
+those indicated in the operational sections of the specification. Exposure to absolute maximum rating conditions 
+for extended periods may affect device reliability.
+6.2 Recommended operating conditions
+Table 12. Recommended operating conditions
+Parameter Min. Typ. Max. Unit
+AVDD supply(1)
+2.8 V configuration 2.5 2.8 3.3
+V
+3.3 V configuration 3.0 3.3 3.6
+IOVDD supply
+1.8 V configuration 1.62 1.8 1.98
+2.8 V configuration 2.5 2.8 3.3
+3.3 V configuration 3.0 3.3 3.6
+ 
+1. AVDD is independent of IOVDD
+ 
+6.3 Electrostatic discharge (ESD)
+The VL53L7CX is compliant with the ESD values presented in the table below.
+Table 13. ESD performances
+Parameter Specification Conditions
+Human body model JEDEC JS-001-2014 ± 2 kV, 1500 Ohms, 100 pF
+Charged device model JEDEC JS-002-2014 ± 500 V
+VL53L7CX
+Electrical characteristics
+DS13865 - Rev 8 page 17/41
+
+=== PDF PAGE 18 ===
+6.4 Current consumption
+The current consumption values are given in the table below.
+• Typical values quoted are for nominal voltage, process, and temperature (23°C).
+• Maximum values are quoted for worst case conditions (process, voltage, and temperature) unless stated 
+otherwise (70°C).
+Table 14. Current consumption
+Device State
+Average current consumption
+UnitAVDD IOVDD
+Typ. Max. Typ. Max.
+LP idle 45 300 0.1 1 μA
+HP idle 1.3 1.6 2.8 35 mA
+Active ranging(1) 45 50 50 80 mA
+ 
+1. Active ranging is when the device is actively ranging. The current consumption is not affected by 4x4 or 8x8 zone 
+configuration
+ 
+IOVDD peak current is the average value +10 mA.
+AVDD peak current is the average current +10 mA.
+Table 15. Example of typical power consumption in continuous mode
+Parameter 2V8/1V8 2V8/2V8 3V3/3V3 Unit
+Continuous mode (4x4 
+mode or 8x8 mode) 216 266 313 mW
+Table 16. Example of typical power consumption in autonomous mode
+Parameter 2V8/1V8 2V8/2V8 3V3/3V3 Unit
+4x4 mode - 1 Hz frame rate with 20 ms 
+integration time 5.4 6.7 8.3
+mW
+4x4 mode - 5 Hz frame rate with 20 ms 
+integration time 25 31 39
+8x8 mode - 1 Hz frame rate with 20 ms 
+integration time 19 24 29
+8x8 mode - 5 Hz frame rate with 20 ms 
+integration time 88 112 135
+VL53L7CX
+Electrical characteristics
+DS13865 - Rev 8 page 18/41
+
+=== PDF PAGE 19 ===
+6.5 Digital input and output
+The following tables summarize the digital I/O electrical characteristics.
+Table 17. INT, I2C_RST, LPn
+Symbol Parameter IOVDD 
+configuration Min. Max. Unit
+VIL Low level input voltage
+1.8 V
+-0.3 0.35* IOVDD
+V
+2.8 V - 3.3 V
+VIH High level input voltage
+1.8 V
+0.65*IOVDD
+2.28
+2.8 V - 3.3 V 3.6
+VOL
+Low level output voltage 
+(IOUT = 4 mA)
+1.8 V
+— 0.4
+2.8 V - 3.3 V
+VOH
+High level output voltage 
+(IOUT = 4 mA)
+1.8 V 1.22
+—
+2.8 V - 3.3 V 2.1
+Table 18. I2C interface (SDA/SCL)
+Symbol Parameter IOVDD 
+configuration Min. Max. Unit
+VIL
+Low level input 
+voltage
+1.8 V
+-0.3
+0.54
+V
+2.8 V - 3.3 V 0.3*IOVDD
+VIH
+High level input 
+voltage
+1.8 V
+1.13
+2.28
+2.8 V - 3.3 V 3.6
+VOL
+Low level output 
+voltage
+(Iout = 4 mA)
+1.8 V
+— 0.4
+2.8 V- 3.3 V
+IIL/IH
+Leakage from IOVDD supply — 2.5
+μA
+Leakage from IOVDD pad — 1
+Note: I2C pads use 1V8 switching thresholds for all IOVDD supplies.
+Note: A maximum load of 12 mA is assumed in the above table.
+VL53L7CX
+Electrical characteristics
+DS13865 - Rev 8 page 19/41
+
+=== PDF PAGE 20 ===
+7 Ranging performance
+7.1 Zone mapping
+7.1.1 Zone mapping 4x4
+The figure below shows the zone definition in 4x4 mode. There are 16 zones in total which increment along a row 
+first before starting a new row. The physical view is from the device top into the lens. The number of each zone, 
+as indicated in the figure below, corresponds to the ZoneIDs returned by the sensor.
+Figure 17. Zone mapping in 4x4 mode
+7.1.2 Zone mapping 8x8
+The figure below shows the zone definition in 8x8 mode. There are 64 zones in total which increment along a row 
+first before starting a new row. The physical view is from the device top into the lens. The number of each zone, 
+as indicated in the figure below, correspond to the ZoneIDs returned by the sensor to the host.
+Figure 18. Zone mapping in 8x8 mode
+VL53L7CX
+Ranging performance
+DS13865 - Rev 8 page 20/41
+
+=== PDF PAGE 21 ===
+7.1.3 Effective zone orientation
+The VL53L7CX module includes a lens over the Rx aperture, which flips (horizontally and vertically) the captured 
+image of the target. Consequently, the zone identified as zone 0 in the bottom left of the SPAD array, is 
+illuminated by a target located at the top right-hand side of the scene.
+Figure 19. Effective orientation
+7.2 Continuous ranging mode
+7.2.1 Measurement conditions
+The following criteria and test conditions apply to all the characterization results detailed in this section unless 
+specified otherwise:
+• The specified target fills 100% of the field of view of the device (in all zones).
+• The targets used are Munsell N4.75 (17%) and Munsell N9.5 (88%).
+• AVDD is 2.8 V. IOVDD is 1.8 V.
+• The nominal ambient temperature is 23°C.
+• Maximum range capability is based on a 90% detection rate.(1)
+• Range accuracy figures are based on a 2.7 sigma that is, 99.3% of measurements are within the specified 
+accuracy.
+• Tests are performed in the dark and at 2 W/m2 target illumination (940 nm). A 2 W/m2 target irradiance at 
+940 nm is equivalent to 5 klx daylight.
+• All tests are performed without cover glass with a crosstalk margin set to 0 kcps.
+• The sensor relies on default calibration data.
+• The device is controlled through the API using the default driver settings.
+ 
+1. The detection rate is a statistical value indicating the worst case percentage of measurements that return a valid ranging. 
+For example, taking 1000 measurements with a 90% detection rate gives 900 valid distances. The 100 other distances may 
+be outside the specification or flagged with an invalid target status.
+ 
+VL53L7CX
+Ranging performance
+DS13865 - Rev 8 page 21/41
+
+=== PDF PAGE 22 ===
+7.2.2 Maximum ranging distance 4x4
+The table below shows the maximum ranging capability of the VL53L7CX under different conditions. Refer to 
+Section 7.2.1: Measurement conditions for the general test conditions.
+Table 19. Maximum ranging capabilities when ranging continuously at 30 Hz
+Target reflectance level. Full 
+FoV (reflectance %) Zone Dark Ambient light (5 klx)
+White target (88%)
+Inner
+Typical 3500 mm
+Minimum 3300 mm
+Typical 650 mm
+Minimum 500 mm
+Corner
+Typical 3500 mm
+Minimum 3300 mm
+Typical 600 mm
+Minimum 600 mm
+Light gray target (54%)
+Inner
+Typical 2800 mm
+Minimum 2600 mm
+Typical 600 mm
+Minimum 600 mm
+Corner
+Typical 2800 mm
+Minimum 2600 mm
+Typical 600 mm
+Minimum 600 mm
+Gray target (17%)
+Inner
+Typical 1400 mm
+Minimum 1300 mm
+Typical 550 mm
+Minimum 500 mm
+Corner
+Typical 1400 mm
+Minimum 1200 mm
+Typical 500 mm
+Minimum 450 mm
+7.2.3 Maximum ranging distance 8x8
+The table below shows the maximum ranging capability of the VL53L7CX under different conditions. Refer to 
+Section 7.2.1: Measurement conditions for the general test conditions.
+Table 20. Maximum ranging capabilities when ranging continuously at 15 Hz
+Target reflectance level. Full 
+FoV (reflectance %) Zone Dark (0 klx) Ambient light (5 klx)
+White target (88%)
+Inner
+Typical 2000 mm
+Minimum 1700 mm
+Typical 500 mm
+Minimum 400 mm
+Corner
+Typical 1900 mm
+Minimum 1100 mm
+Typical 500 mm
+Minimum 400 mm
+Light gray target (54%)
+Inner
+Typical 1600 mm
+Minimum 1500 mm
+Typical 400 mm
+Minimum 400 mm
+Corner
+Typical 1600 mm
+Minimum 1100 mm
+Typical 400 mm
+Minimum 400 mm
+Gray target (17%)
+Inner
+Typical 800 mm
+Minimum 700 mm
+Typical 350 mm
+Minimum 250 mm
+Corner
+Typical 750 mm
+Minimum 450 mm
+Typical 250 mm
+Minimum 200 mm
+VL53L7CX
+Ranging performance
+DS13865 - Rev 8 page 22/41
+
+=== PDF PAGE 23 ===
+7.2.4 Range accuracy in continuous mode
+The figure below illustrates how range accuracy is defined over distance.
+Figure 20. Range accuracy vs distance
+Table 21. Range accuracy in continuous mode
+Mode Distance Target reflectance Dark (0 klx) Ambient light (5 klx)
+4x4 (30 Hz)
+20-200 mm
+White target (88%) ±9 mm ±7 mm
+Light gray target (54%) ±9 mm ±7 mm
+Gray target (17%) ±10 mm ±11 mm
+200-4000 mm
+White target (88%) ±3% ±7%
+Light gray target (54%) ±4% ±9%
+Gray target (17%) ±4% ±10%
+8x8 (15 Hz)
+20-200 mm
+White target (88%) ±11 mm ±12 mm
+Light gray target (54%) ±12 mm ±14 mm
+Gray target (17%) ±12 mm ±20 mm
+200-4000 mm
+White target (88%) ±5% ±9%
+Light gray target (54%) ±6% ±12%
+Gray target (17%) ±6% ±14%
+VL53L7CX
+Ranging performance
+DS13865 - Rev 8 page 23/41
+
+=== PDF PAGE 24 ===
+7.3 Autonomous ranging mode
+7.3.1 Measurement conditions
+The following criteria and test conditions apply to all the characterization results detailed in this section unless 
+specified otherwise:
+• The specified target fills 100% of the field of view of the device (in all zones).
+• The targets used are Munsell N4.75 (17%) and Munsell N9.5 (88%).
+• AVDD is 2.8 V. IOVDD is 1.8 V.
+• The nominal ambient temperature is 23°C.
+• Maximum range capability is based on a 90 % detection rate.(1)
+• Range accuracy figures are based on a 2.7 sigma that is, 99.3% of measurements are within the specified 
+accuracy.
+• Tests are performed in the dark and at 2 W/m2 target illumination (940 nm). A 2 W/m2 target irradiance at 
+940 nm is equivalent to 5 klx daylight.
+• All tests are performed without cover glass with crosstalk margin set to 0 kcps.
+• The sensor relies on default calibration data.
+• The device is controlled thought the API using the default driver settings.
+ 
+1. The detection rate is a statistical value indicating the worst case percentage of measurements that return a valid ranging. 
+For example, taking 1000 measurements with a 90 % detection rate gives 900 valid distances. The 100 other distances may 
+be outside the specification or flagged with an invalid target status.
+ 
+7.3.2 Maximum ranging distance 4x4
+The table below shows the maximum ranging capability of the VL53L7CX under different conditions. Refer to 
+Section 7.3.1: Measurement conditions for the general test conditions.
+Table 22. Maximum ranging capabilities when ranging with autonomous mode at 1 Hz, 4x4, integration 
+time 20 ms
+Target reflectance Zone Dark (0 klx) Ambient light (5 klx)
+White target (88%)
+Inner
+Typical: 3300 mm
+Minimum: 3200 mm
+Typical: 650 mm
+Minimum: 600 mm
+Corner
+Typical: 3400 mm
+Minimum: 3000 mm
+Typical: 600 mm
+Minimum: 600 mm
+Light gray target (54%)
+Inner
+Typical: 2750 mm
+Minimum: 2700 mm
+Typical: 600 mm
+Minimum: 600 mm
+Corner
+Typical: 2750 mm
+Minimum: 2500 mm
+Typical: 600 mm
+Minimum: 550 mm
+Gray target (17%)
+Inner
+Typical: 1250 mm
+Minimum: 1200 mm
+Typical: 500 mm
+Minimum: 500 mm
+Corner
+Typical: 1250 mm
+Minimum: 1150 mm
+Typical: 500 mm
+Minimum: 500 mm
+The table below shows the maximum ranging capability of the VL53L7CX under different conditions. Refer to 
+Section 7.3.1: Measurement conditions for the general test conditions.
+VL53L7CX
+Ranging performance
+DS13865 - Rev 8 page 24/41
+
+=== PDF PAGE 25 ===
+Table 23. Maximum ranging capabilities when ranging with autonomous mode at 1 Hz, 8x8, integration 
+time 20 ms
+Target reflectance level.
+Full FoV (reflectance %)
+Zone Dark (0 klx) Ambient light (5 klx)
+White target (88%)
+Inner
+Typical: 2000 mm
+Minimum: 1800 mm
+Typical: 550 mm
+Minimum: 500 mm
+Corner
+Typical: 1900 mm
+Minimum: 1200 mm
+Typical: 550 mm
+Minimum: 500 mm
+Light gray target (54%)
+Inner
+Typical: 1700 mm
+Minimum: 1500 mm
+Typical: 500 mm
+Minimum: 500 mm
+Corner
+Typical: 1400 mm
+Minimum: 1000 mm
+Typical: 500 mm
+Minimum: 500 mm
+Gray target (17%)
+Inner
+Typical: 800 mm
+Minimum: 800 mm
+Typical: 500 mm
+Minimum: 450 mm
+Corner
+Typical: 950 mm
+Minimum: 850 mm
+Typical: 400 mm
+Minimum: 400 mm
+VL53L7CX
+Ranging performance
+DS13865 - Rev 8 page 25/41
+
+=== PDF PAGE 26 ===
+7.3.3 Range accuracy - autonomous mode
+Table 24. Range accuracy – autonomous mode
+Distance (mm) Mode Reflectance Dark (0 klx) Ambient light (5 klx)
+4x4, 1 Hz, 20 ms integration time
+20-200 mm
+White target (88%) ±10 mm ±9 mm
+Light gray target (54%) ±10 mm ±9 mm
+Gray target (17%) ±11 mm ±13 mm
+200-4000 mm
+White target (88%) ±4% ±6%
+Light gray target (54%) ±3% ±5%
+Gray target (17%) ±5% ±9%
+8x8, 1 Hz, 20 ms integration time
+20-200 mm
+White target (88%) ±12 mm ±14 mm
+Light gray target (54%) ±12 mm ±18 mm
+Gray target (17%) ±14 mm ±21 mm
+200-4000 mm
+White target (88%) ±6% ±7%
+Light gray target (54%) ±6% ±8%
+Gray target (17%) ±7% ±14%
+7.4 Range offset drift over temperature
+Self-heating or a change in ambient temperature increases silicon temperature, which results in a range-offset 
+drift. This may be minimized by performing a periodic autocalibration, resulting in a typical drift of 0.15 mm/°C.
+The autocalibration is done automatically when a new ranging session is started. A stop/start of the device is 
+required if the device is already streaming.
+VL53L7CX
+Ranging performance
+DS13865 - Rev 8 page 26/41
+
+=== PDF PAGE 27 ===
+8 Outline drawings
+The module drawings below give details of the VL53L7CX module. All values are given in millimeters.
+Note: These module drawings are based on DM00838755, rev 4.0.
+Figure 21. Outline drawing (1/4)
+Note: A thermal pad is required on the application board for thermal dissipation. For more information, refer to 
+AN5853.
+Note: For more information, refer to the pin description in Table 3. VL53L7CX pin description.
+VL53L7CX
+Outline drawings
+DS13865 - Rev 8 page 27/41
+
+=== PDF PAGE 28 ===
+Figure 22. Outline drawing (2/4)
+Figure 23. Outline drawing (3/4) - option with liner
+VL53L7CX
+Outline drawings
+DS13865 - Rev 8 page 28/41
+
+=== PDF PAGE 29 ===
+Figure 24. Outline drawing (4/4) - exclusion zones
+VL53L7CX
+Outline drawings
+DS13865 - Rev 8 page 29/41
+
+=== PDF PAGE 30 ===
+9 Laser safety
+This product contains a laser emitter and corresponding drive circuitry. The laser output is designed to meet 
+Class 1 laser safety limits under all reasonably foreseeable conditions including single faults in compliance with 
+IEC 60825-1:2014.
+Do not increase the laser output power by any means. Do not use any optics to focus the laser beam.
+Caution: Use of controls or adjustments, or performance of procedures other than those specified herein may result in 
+hazardous radiation exposure.
+Figure 25. Class 1 laser label
+This product complies with:
+• IEC 60825-1:2014
+• 21 CFR 1040.10 and 1040.11, except for conformance with IEC 60825-1:2014 as described in the laser 
+notice number 56, dated May 8, 2019.
+• EN 60825-1:2014 including EN 60825-1:2014/A11:2021
+• EN 50689:2021, however STMicroelectronics does not guarantee compliance with the requirement of 
+clause 5 from EN50689 regarding child appealing products. If designing a child appealing product, contact 
+STMicroelectronics' technical application support.
+VL53L7CX
+Laser safety
+DS13865 - Rev 8 page 30/41
+
+=== PDF PAGE 31 ===
+10 Packing and labeling
+10.1 Product marking
+There are two types of product marking:
+• The first is on the backside of the module as shown in Figure 22. Outline drawing (2/4).
+• The second is on the corner of the module cap as shown in Figure 26 below.
+Product marking on the backside of the module
+This is a two-zone product marking. The first marking is the silicon product code. The second is the internal 
+tracking code.
+Product marking on the corner of the module cap
+This is a 2D product marking. Note that the code aligns with pin C7 of the module. It is not an indicator of pin 1.
+Figure 26. 2D marking product code on the module cap
+VL53L7CX
+Packing and labeling
+DS13865 - Rev 8 page 31/41
+
+=== PDF PAGE 32 ===
+10.2 Inner box labeling
+The labeling follows the ST standard packing acceptance specification.
+The following information is on the inner box label:
+• Assembly site
+• Sales type
+• Quantity
+• Trace code
+• Marking
+• Bulk ID number
+10.3 Packing
+At the customer/subcontractor level, it is recommended to mount the VL53L7CX in a clean environment.
+To help avoid any foreign material contamination at the final assembly level the modules are shipped in a tape 
+and reel format.
+10.4 Tape outline drawing
+Figure 27. VL53L7CX tape outline and reel packaging drawing
+Caution: For devices with the liner option, the liner must be removed during assembly of the customer device just before 
+mounting the cover glass. The liner is compliant with a reflow at 260°C (as per JEDEC-STD-020E).
+VL53L7CX
+Packing and labeling
+DS13865 - Rev 8 page 32/41
+
+=== PDF PAGE 33 ===
+11 Handling, moisture, and reflow precautions
+11.1 Recommended solder pad dimensions
+Figure 28. Recommended solder pattern
+11.2 Shock precautions
+Sensor modules house numerous internal components that are susceptible to shock damage. If a unit is subject 
+to excessive shock, is dropped on the floor, or a tray/reel of units is dropped on the floor, it must be rejected, even 
+if no apparent damage is visible.
+11.3 Part handling
+Handling must be done with nonmarring ESD safe carbon, plastic, or teflon tweezers. Ranging modules are 
+susceptible to damage or contamination. The customer is advised to use a clean assembly process until a 
+protective cover glass is mounted.
+11.4 Compression force
+A maximum compressive load of 25 N should be applied on the module.
+11.5 Moisture sensitivity level
+Moisture sensitivity is level 3 (MSL) as described in IPC/JEDEC JSTD-020-C.
+For devices that are classified to the levels defined in JEDEC JSTD-020-C, JEDEC JSTD-033-C provides:
+• Manufacturers and users with standardized methods for handling, packing and shipping.
+• Standardized methods for using moisture/reflow and process sensitive devices.
+Note: If devices are stored out of the packing for more than 168 hours, the devices should be baked before use. The 
+optimum bake recommended is at + 90°C for a minimum of 6 hours.
+VL53L7CX
+Handling, moisture, and reflow precautions
+DS13865 - Rev 8 page 33/41
+
+=== PDF PAGE 34 ===
+11.6 Pb-free solder reflow process
+The table and figure below show the recommended and maximum values for the solder profile.
+Customers have to tune the reflow profile depending on the PCB, solder paste and material used. We expect 
+customers to follow the “recommended” reflow profile, which is specifically tuned for the VL53L7CX package.
+For any reason, if a customer must perform a reflow profile which is different from the “recommended” one 
+(especially peak >240°C), the new profile must be qualified by the customer at their own risk. In any case, the 
+profile has to be within the “maximum” profile limit described in the table below.
+Table 25. Recommended solder profile
+Parameters Recommended Maximum Units
+Minimum temperature (TS min)
+Maximum temperature (TS max)
+Time ts (TS min to TS max)
+130
+200
+90-110
+150
+200
+60-120
+°C
+°C
+s
+Temperature (TL)
+Time (tL)
+Ramp up
+217
+55-65
+2
+217
+55-65
+3
+°C
+s
+°C/s
+Temperature (Tp-10)
+Time (tp-10)
+Ramp up
+—
+—
+—
+235
+10
+3
+°C
+s
+°C/s
+Peak temperature (Tp) 240 260 °C
+Time to peak 300 300 s
+Ramp down (peak to TL) -4 -6 °C/s
+Figure 29. Solder profile
+Note: The component should be limited to a maximum of three passes through this solder profile.
+Note: As the VL53L7CX package is not sealed, only a dry reflow process should be used (such as convection reflow). 
+Vapor phase reflow is not suitable for this type of optical component.
+Note: The VL53L7CX is an optical component and as such, it should be treated carefully. This would typically include 
+using a ‘no-wash’ assembly process.
+VL53L7CX
+Handling, moisture, and reflow precautions
+DS13865 - Rev 8 page 34/41
+
+=== PDF PAGE 35 ===
+12 Ordering information
+The VL53L7CX is currently available in the formats below. More detailed information is available on request.
+Table 26. Order codes
+Order codes Package Packing Minimum order quantity
+VL53L7CXV0GC/1 Optical LGA16 with liner Tape and reel 3600 pcs
+VL53L7CXV9GC/1 Optical LGA16 without liner Tape and reel 3600 pcs
+VL53L7CX
+Ordering information
+DS13865 - Rev 8 page 35/41
+
+=== PDF PAGE 36 ===
+13 Package information
+To meet environmental requirements, ST offers these devices in different grades of ECOPACK packages, 
+depending on their level of environmental compliance. ECOPACK specifications, grade definitions, and product 
+status are available at: www.st.com. ECOPACK is an ST trademark.
+VL53L7CX
+Package information
+DS13865 - Rev 8 page 36/41
+
+=== PDF PAGE 37 ===
+Revision history
+Table 27. Document revision history
+Date Version Changes
+09-Dec-2021 1 Initial release
+29-Jun-2022 2 Updated Figure 14. VL53L7CX data format (sequential write).
+12-Sep-2022 3
+Updated the cover image.
+Updated Features, Application, and Description.
+Indicated the ranging in Section 2.1: Technical specifications.
+Updated Figure 1. System FoV and exclusion zone description (not to scale).
+Modified the diagonal angle for detection volume in Table 2. FoV angles.
+Added Section 2.3: Field of illumination.
+Updated the references to the application note and user manual in the notes 
+at the end of Section 2.5: Device pinout.
+Updated values in Table 16. Example of typical power consumption in 
+autonomous mode
+In Section 7.2: Continuous ranging mode entered the value for 
+Table 19. Maximum ranging capabilities when ranging continuously at 30 Hz, 
+Table 20. Maximum ranging capabilities when ranging continuously at 15 Hz, 
+and Table 21. Range accuracy in continuous mode.
+In Section 7.3: Autonomous ranging mode entered the value for 
+Table 22. Maximum ranging capabilities when ranging with autonomous mode 
+at 1 Hz, 4x4, integration time 20 ms, Table 23. Maximum ranging capabilities 
+when ranging with autonomous mode at 1 Hz, 8x8, integration time 20 ms, 
+and Table 24. Range accuracy – autonomous mode.
+Modified the drift value in Section 7.4: Range offset drift over temperature.
+Updated figures in Section 8: Outline drawings.
+Updated Figure 27. 2D product marking code.
+14-Nov-2022 4
+Table 8. I2C interface - timing characteristics for fast mode (400 kHz): updated 
+unit of tBUF parameter.
+Laser safety considerations: removed information and figure relating to "laser 
+notice 50, applying to IEC 60825-1:2007.
+17-Mar-2023 5
+Updated cover image.
+Updated Laser safety considerations.
+Updated Figure 26. Product marking area.
+29-Mar-2023 6 Updated document status
+09-Apr-2024 7
+Replaced the terms master and slave with controller and target.
+Table 3. VL53L7CX pin description: updated pin A5.
+Section 8: Outline drawings: updated text, added a note, updated all drawings, 
+and updated the titles of Figure 22. Outline drawing (2/4), Figure 23. Outline 
+drawing (3/4) - option with liner, and Figure 24. Outline drawing (4/4) - 
+exclusion zones.
+Updated Section 9: Laser safety.
+Updated Section 10.1: Product marking.
+Updated Section 10.3: Packing.
+Table 26. Order codes: added new order code (VL53L7CXV9GC/1) for option 
+without liner.
+16-Sep-2024 8
+Section 2.2: Field of view: Modified collector exclusion zone diagonal angle 
+from 105° to 116°.
+Added Section 5: Thermal characteristics, including AMR with maximum at 
+125°C.
+VL53L7CX
+Package information
+DS13865 - Rev 8 page 37/41
+
+=== PDF PAGE 38 ===
+Date Version Changes
+16-Sep-2024 8 continued
+Table 12. Recommended operating conditions: Removed ambient 
+temperature data.
+Renamed Section 10: Packing and labeling.
+Section 10.3: Packing: Removed note and moved note to Section 10.4: Tape 
+outline drawing.
+Removed section Storage temperature conditions.
+Section 11.5: Moisture sensitivity level: Added information regarding JEDEC 
+JSTD-033-C.
+VL53L7CX
+Package information
+DS13865 - Rev 8 page 38/41
+
+=== PDF PAGE 39 ===
+Contents
+1 Acronyms and abbreviations ...................................................... 3
+2 Product overview .................................................................. 4
+2.1 Technical specifications ......................................................... 4
+2.2 Field of view................................................................... 4
+2.3 Field of illumination ............................................................. 5
+2.4 System block diagram .......................................................... 6
+2.5 Device pinout.................................................................. 6
+2.6 Application schematic........................................................... 8
+3 Functional description ............................................................. 9
+3.1 Software interface .............................................................. 9
+3.2 Power state machine ........................................................... 9
+3.3 Power up sequence ........................................................... 10
+3.3.1 Power up slew.......................................................... 11
+3.3.2 Power up and I2C access ................................................. 11
+4 I2C control interface .............................................................. 12
+4.1 I2C interface - timing characteristics .............................................. 14
+5 Thermal characteristics........................................................... 16
+5.1 Absolute maximum rating (TSTG) ................................................ 16
+5.2 Ambient operating temparature.................................................. 16
+6 Electrical characteristics.......................................................... 17
+6.1 Absolute maximum ratings...................................................... 17
+6.2 Recommended operating conditions ............................................. 17
+6.3 Electrostatic discharge (ESD) ................................................... 17
+6.4 Current consumption .......................................................... 18
+6.5 Digital input and output......................................................... 19
+7 Ranging performance............................................................. 20
+7.1 Zone mapping ................................................................ 20
+7.1.1 Zone mapping 4x4 ...................................................... 20
+7.1.2 Zone mapping 8x8 ...................................................... 20
+7.1.3 Effective zone orientation ................................................. 21
+7.2 Continuous ranging mode ...................................................... 21
+7.2.1 Measurement conditions .................................................. 21
+7.2.2 Maximum ranging distance 4x4............................................. 22
+7.2.3 Maximum ranging distance 8x8............................................. 22
+VL53L7CX
+Contents
+DS13865 - Rev 8 page 39/41
+
+=== PDF PAGE 40 ===
+7.2.4 Range accuracy in continuous mode ........................................ 23
+7.3 Autonomous ranging mode ..................................................... 24
+7.3.1 Measurement conditions .................................................. 24
+7.3.2 Maximum ranging distance 4x4............................................. 24
+7.3.3 Range accuracy - autonomous mode ........................................ 26
+7.4 Range offset drift over temperature .............................................. 26
+8 Outline drawings ................................................................. 27
+9 Laser safety ...................................................................... 30
+10 Packing and labeling ............................................................. 31
+10.1 Product marking .............................................................. 31
+10.2 Inner box labeling ............................................................. 32
+10.3 Packing...................................................................... 32
+10.4 Tape outline drawing........................................................... 32
+11 Handling, moisture, and reflow precautions ....................................... 33
+11.1 Recommended solder pad dimensions ........................................... 33
+11.2 Shock precautions............................................................. 33
+11.3 Part handling ................................................................. 33
+11.4 Compression force ............................................................ 33
+11.5 Moisture sensitivity level........................................................ 33
+11.6 Pb-free solder reflow process ................................................... 34
+12 Ordering information ............................................................. 35
+13 Package information.............................................................. 36
+Revision history ....................................................................... 37
+VL53L7CX
+Contents
+DS13865 - Rev 8 page 40/41
+
+=== PDF PAGE 41 ===
+IMPORTANT NOTICE – READ CAREFULLY
+STMicroelectronics NV and its subsidiaries (“ST”) reserve the right to make changes, corrections, enhancements, modifications, and improvements to ST 
+products and/or to this document at any time without notice. Purchasers should obtain the latest relevant information on ST products before placing orders. ST 
+products are sold pursuant to ST’s terms and conditions of sale in place at the time of order acknowledgment.
+Purchasers are solely responsible for the choice, selection, and use of ST products and ST assumes no liability for application assistance or the design of 
+purchasers’ products.
+No license, express or implied, to any intellectual property right is granted by ST herein.
+Resale of ST products with provisions different from the information set forth herein shall void any warranty granted by ST for such product.
+ST and the ST logo are trademarks of ST. For additional information about ST trademarks, refer to www.st.com/trademarks. All other product or service names 
+are the property of their respective owners.
+Information in this document supersedes and replaces information previously supplied in any prior versions of this document.
+© 2024 STMicroelectronics – All rights reserved
+VL53L7CX
+DS13865 - Rev 8 page 41/41
