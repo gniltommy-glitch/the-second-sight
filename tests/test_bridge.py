@@ -5,7 +5,6 @@ import random
 import struct
 import sys
 import threading
-import time
 import unittest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'pi'))
 from stm32_bridge import (Decoder, encode, Bridge, START, PCM, STOP, BUTTON_ACK,
