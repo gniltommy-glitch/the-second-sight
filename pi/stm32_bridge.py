@@ -97,10 +97,12 @@ class Bridge:
                     raise OSError('UART write made no progress')
                 offset += sent
 
-    def _dispatch(self, kind, seq, p):
-        if kind == ACK and len(p) == 1:
+    def _handle_ack(self, seq, p):
+        if len(p) == 1:
             self.acks.put((seq, p[0]))
-        elif kind == BUTTON and len(p) == 4:
+
+    def _handle_button(self, seq, p):
+        if len(p) == 4:
             count, = struct.unpack('<I', p)
             if count != self.last_button:
                 try:
@@ -110,10 +112,14 @@ class Bridge:
                     return  # No ACK: STM32 retries until YOLO has queue space.
                 self.last_button = count
             self._write(BUTTON_ACK, seq, p)
-        elif kind == TOF and len(p) == 132:
+
+    def _handle_tof(self, seq, p):
+        if len(p) == 132:
             values = struct.unpack('<I64H', p)
             self.latest_tof = (values[0], [list(values[1+i*8:9+i*8]) for i in range(8)])
-        elif kind == STATUS and len(p) == 48:
+
+    def _handle_status(self, seq, p):
+        if len(p) == 48:
             values = struct.unpack('<4B11I', p)
             names = ['version', 'audio_ok', 'tof_ready', 'audio_active', 'uptime_ms',
                      'tof_frames', 'tof_errors', 'underruns', 'uart_errors', 'rx_overflows',
@@ -124,12 +130,29 @@ class Bridge:
                 self.last_button = None
             self.status = update
             self.status_time = time.monotonic()
-        elif kind == DONE and len(p) == 4:
+
+    def _handle_done(self, seq, p):
+        if len(p) == 4:
             self.done.set()
+
+    def _handle_boot(self, seq, p):
+        self.boots += 1
+        self.last_button = None
+        self.status = None
+
+    def _dispatch(self, kind, seq, p):
+        if kind == ACK:
+            self._handle_ack(seq, p)
+        elif kind == BUTTON:
+            self._handle_button(seq, p)
+        elif kind == TOF:
+            self._handle_tof(seq, p)
+        elif kind == STATUS:
+            self._handle_status(seq, p)
+        elif kind == DONE:
+            self._handle_done(seq, p)
         elif kind == BOOT:
-            self.boots += 1
-            self.last_button = None
-            self.status = None
+            self._handle_boot(seq, p)
 
     def _reader(self):
         try:
