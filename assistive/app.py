@@ -98,6 +98,85 @@ class AssistiveApp:
             priority=5, key="ocr-result", ttl=60., repeat_after=0.)
         self._set_mode(Mode.OCR_SPEAKING)
 
+    def _check_health(self):
+        self.link.check_health()
+        self.camera.check_health()
+        self.speech.check_health()
+
+    def _process_camera(self, now):
+        frame = self.camera.latest(self.runtime.get("frame_max_age", 1.))
+        if frame is not None:
+            self.last_camera_seen = now
+        elif now - self.last_camera_seen > self.runtime.get("camera_timeout", 5.):
+            raise TimeoutError("No fresh camera frame")
+        return frame
+
+    def _process_tof(self, now):
+        tof = self.link.get_tof()
+        if tof is not None:
+            self.last_tof_seen = now
+            alert = self.tof_policy.analyze([], tof, now=time.monotonic())
+            if alert["priority"] == 0 and alert["text"]:
+                self.speech.speak(alert["text"], priority=0, key=alert["key"],
+                                  repeat_after=3., ttl=1.)
+        elif now - self.last_tof_seen > 3.:
+            self.speech.speak("Chưa có dữ liệu khoảng cách. Bạn hãy thận trọng.",
+                              priority=3, key="tof-unavailable", ttl=5., repeat_after=20.)
+
+    def _process_mock_button(self, now, started_at, mock_button_after, button_sent):
+        if self.mock and mock_button_after is not None and not button_sent:
+            if now - started_at >= mock_button_after and self.mode == Mode.NAVIGATING:
+                self.link.press()
+                return True
+        return button_sent
+
+    def _process_button(self, frame):
+        # Firmware retransmissions deduped in SerialLink; busy presses coalesce.
+        button = self.link.poll_button()
+        if button is not None:
+            if self.mode in (Mode.STARTING, Mode.NAVIGATING) and frame is not None:
+                self._start_ocr(frame)
+            elif self.mode in (Mode.OCR_LOADING, Mode.OCR_RUNNING, Mode.OCR_SPEAKING):
+                log.info("Button acknowledged while OCR busy; request coalesced")
+            else:
+                self.speech.speak("Camera chưa sẵn sàng. Bạn hãy bấm lại.", priority=5)
+
+    def _process_models(self, now):
+        try:
+            event = self.models.poll()
+            if event:
+                self._handle_model_event(event, now)
+        except (RuntimeError, TimeoutError) as exc:
+            log.exception("AI worker failed")
+            if self.mode in (Mode.OCR_LOADING, Mode.OCR_RUNNING):
+                self._say_ocr("Không đọc được văn bản. Bạn hãy thử lại.")
+            else:
+                self.yolo_failures += 1
+                if self.yolo_failures >= 3:
+                    raise RuntimeError("YOLO repeatedly failed") from exc
+                self.speech.speak("Nhận diện tạm gián đoạn. Bạn hãy dừng lại.",
+                                  priority=1, key="ai-failed", repeat_after=0.)
+                self._start_yolo()
+
+    def _update_state(self, now, frame):
+        if self.mode == Mode.NAVIGATING and frame is not None:
+            interval = 1. / self.runtime.get("max_inference_fps", 5.)
+            if frame[0] != self.last_frame_id and now - self.last_submit >= interval:
+                if self.models.submit(*frame, self.runtime.get("yolo_timeout", 15.)):
+                    self.last_frame_id, self.last_submit = frame[0], now
+        elif self.mode == Mode.OCR_SPEAKING:
+            if self.ocr_ticket.done.is_set():
+                if self.ocr_ticket.error:
+                    raise RuntimeError("OCR audio output failed") from self.ocr_ticket.error
+                if self.ocr_ticket.cancelled.is_set():
+                    log.info("OCR speech interrupted by higher priority alert")
+                self._start_yolo()
+            elif now - self.mode_since > self.runtime.get("ocr_speech_timeout", 300.):
+                raise TimeoutError("OCR speech did not finish")
+        if not self.started and self.mode == Mode.NAVIGATING:
+            self.started = True
+            notify_systemd("READY=1")
+
     def run(self, duration=None, mock_button_after=None):
         started_at = time.monotonic()
         button_sent = False
@@ -110,69 +189,14 @@ class AssistiveApp:
                 now = time.monotonic()
                 if duration is not None and now - started_at >= duration:
                     break
-                self.link.check_health()
-                self.camera.check_health()
-                self.speech.check_health()
-                frame = self.camera.latest(self.runtime.get("frame_max_age", 1.))
-                if frame is not None:
-                    self.last_camera_seen = now
-                elif now - self.last_camera_seen > self.runtime.get("camera_timeout", 5.):
-                    raise TimeoutError("No fresh camera frame")
-                tof = self.link.get_tof()
-                if tof is not None:
-                    self.last_tof_seen = now
-                    alert = self.tof_policy.analyze([], tof, now=time.monotonic())
-                    if alert["priority"] == 0 and alert["text"]:
-                        self.speech.speak(alert["text"], priority=0, key=alert["key"],
-                                          repeat_after=3., ttl=1.)
-                elif now - self.last_tof_seen > 3.:
-                    self.speech.speak("Chưa có dữ liệu khoảng cách. Bạn hãy thận trọng.",
-                                      priority=3, key="tof-unavailable", ttl=5., repeat_after=20.)
-                if self.mock and mock_button_after is not None and not button_sent:
-                    if now - started_at >= mock_button_after and self.mode == Mode.NAVIGATING:
-                        self.link.press()
-                        button_sent = True
-                # Firmware retransmissions deduped in SerialLink; busy presses coalesce.
-                button = self.link.poll_button()
-                if button is not None:
-                    if self.mode in (Mode.STARTING, Mode.NAVIGATING) and frame is not None:
-                        self._start_ocr(frame)
-                    elif self.mode in (Mode.OCR_LOADING, Mode.OCR_RUNNING, Mode.OCR_SPEAKING):
-                        log.info("Button acknowledged while OCR busy; request coalesced")
-                    else:
-                        self.speech.speak("Camera chưa sẵn sàng. Bạn hãy bấm lại.", priority=5)
-                try:
-                    event = self.models.poll()
-                    if event:
-                        self._handle_model_event(event, now)
-                except (RuntimeError, TimeoutError) as exc:
-                    log.exception("AI worker failed")
-                    if self.mode in (Mode.OCR_LOADING, Mode.OCR_RUNNING):
-                        self._say_ocr("Không đọc được văn bản. Bạn hãy thử lại.")
-                    else:
-                        self.yolo_failures += 1
-                        if self.yolo_failures >= 3:
-                            raise RuntimeError("YOLO repeatedly failed") from exc
-                        self.speech.speak("Nhận diện tạm gián đoạn. Bạn hãy dừng lại.",
-                                          priority=1, key="ai-failed", repeat_after=0.)
-                        self._start_yolo()
-                if self.mode == Mode.NAVIGATING and frame is not None:
-                    interval = 1. / self.runtime.get("max_inference_fps", 5.)
-                    if frame[0] != self.last_frame_id and now - self.last_submit >= interval:
-                        if self.models.submit(*frame, self.runtime.get("yolo_timeout", 15.)):
-                            self.last_frame_id, self.last_submit = frame[0], now
-                elif self.mode == Mode.OCR_SPEAKING:
-                    if self.ocr_ticket.done.is_set():
-                        if self.ocr_ticket.error:
-                            raise RuntimeError("OCR audio output failed") from self.ocr_ticket.error
-                        if self.ocr_ticket.cancelled.is_set():
-                            log.info("OCR speech interrupted by higher priority alert")
-                        self._start_yolo()
-                    elif now - self.mode_since > self.runtime.get("ocr_speech_timeout", 300.):
-                        raise TimeoutError("OCR speech did not finish")
-                if not self.started and self.mode == Mode.NAVIGATING:
-                    self.started = True
-                    notify_systemd("READY=1")
+                self._check_health()
+                frame = self._process_camera(now)
+                self._process_tof(now)
+                button_sent = self._process_mock_button(now, started_at, mock_button_after, button_sent)
+                self._process_button(frame)
+                self._process_models(now)
+                self._update_state(now, frame)
+
                 notify_systemd(f"WATCHDOG=1\nSTATUS={self.mode.name}")
                 self.stop_event.wait(.02)
         finally:
