@@ -177,6 +177,13 @@ class ToFFusion:
             return {}
         support: dict[int, list[float]] = {i: [] for i in range(len(objects))}
         inset = min(0.4, max(0.0, float(self.config.get("bbox_inset", 0.1))))
+
+        object_bounds = []
+        for item in objects:
+            left, top, right, bottom = item["bbox"]
+            dx, dy = (right - left) * inset, (bottom - top) * inset
+            object_bounds.append((left + dx, right - dx, top + dy, bottom - dy, item.get("polygon")))
+
         for zone, distance in enumerate(values):
             if not self.valid(distance):
                 continue
@@ -185,11 +192,8 @@ class ToFFusion:
                 continue
             x, y = projected
             candidates = []
-            for index, item in enumerate(objects):
-                left, top, right, bottom = item["bbox"]
-                dx, dy = (right - left) * inset, (bottom - top) * inset
-                if left + dx <= x <= right - dx and top + dy <= y <= bottom - dy:
-                    polygon = item.get("polygon")
+            for index, (min_x, max_x, min_y, max_y, polygon) in enumerate(object_bounds):
+                if min_x <= x <= max_x and min_y <= y <= max_y:
                     if not polygon or point_in_polygon(x, y, polygon):
                         candidates.append(index)
             # Overlapping boxes do not provide a reliable object association.
