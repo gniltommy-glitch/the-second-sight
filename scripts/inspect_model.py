@@ -87,6 +87,38 @@ def inspect_checkpoint(path: Path) -> dict:
     return report
 
 
+def _process_yaml_entry(archive: zipfile.ZipFile, entry: zipfile.ZipInfo, report: dict) -> None:
+    content = archive.read(entry).decode("utf-8", errors="replace")
+    names = None
+    for line in content.splitlines():
+        if line.strip().startswith("names:"):
+            try:
+                names = ast.literal_eval(line.partition(":")[2].strip())
+            except (ValueError, SyntaxError):
+                pass
+    report["yaml"].append({"path": entry.filename, "names": names, "text": content})
+
+
+def _process_txt_entry(archive: zipfile.ZipFile, entry: zipfile.ZipInfo, counts: Counter, report: dict, max_rows: int) -> None:
+    for line in archive.read(entry).decode("utf-8", errors="replace").splitlines():
+        fields = line.split()
+        try:
+            values = [float(value) for value in fields]
+        except ValueError:
+            continue
+        if not values or not values[0].is_integer():
+            continue
+        if len(fields) == 5:
+            counts["box_rows"] += 1
+        elif len(fields) >= 7 and len(fields) % 2 == 1:
+            counts["polygon_rows"] += 1
+        else:
+            counts["other_numeric_rows"] += 1
+        report["label_rows_sampled"] += 1
+        if report["label_rows_sampled"] >= max_rows:
+            break
+
+
 def inspect_dataset(path: Path, max_rows: int = 10000) -> dict:
     report = {"file": str(path), "yaml": [], "label_rows_sampled": 0}
     counts = Counter()
@@ -97,34 +129,10 @@ def inspect_dataset(path: Path, max_rows: int = 10000) -> dict:
                 continue
             seen.add(entry.filename)
             if entry.filename.lower().endswith((".yaml", ".yml")) and entry.file_size <= 65536:
-                content = archive.read(entry).decode("utf-8", errors="replace")
-                names = None
-                for line in content.splitlines():
-                    if line.strip().startswith("names:"):
-                        try:
-                            names = ast.literal_eval(line.partition(":")[2].strip())
-                        except (ValueError, SyntaxError):
-                            pass
-                report["yaml"].append({"path": entry.filename, "names": names, "text": content})
+                _process_yaml_entry(archive, entry, report)
             if not entry.filename.lower().endswith(".txt") or entry.file_size > 2 * 1024 * 1024 or report["label_rows_sampled"] >= max_rows:
                 continue
-            for line in archive.read(entry).decode("utf-8", errors="replace").splitlines():
-                fields = line.split()
-                try:
-                    values = [float(value) for value in fields]
-                except ValueError:
-                    continue
-                if not values or not values[0].is_integer():
-                    continue
-                if len(fields) == 5:
-                    counts["box_rows"] += 1
-                elif len(fields) >= 7 and len(fields) % 2 == 1:
-                    counts["polygon_rows"] += 1
-                else:
-                    counts["other_numeric_rows"] += 1
-                report["label_rows_sampled"] += 1
-                if report["label_rows_sampled"] >= max_rows:
-                    break
+            _process_txt_entry(archive, entry, counts, report, max_rows)
     report.update(counts)
     report["mixed_boxes_and_polygons"] = bool(counts["box_rows"] and counts["polygon_rows"])
     return report
