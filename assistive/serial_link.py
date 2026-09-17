@@ -241,48 +241,56 @@ class SerialLink:
         self._sequence = (self._sequence + 1) & 0xFFFF
         return self._sequence
 
+    def _check_cancel(self, cancel: threading.Event | None = None) -> None:
+        self.check_health()
+        if cancel is not None and cancel.is_set():
+            raise PlaybackCancelled()
+
+    def _wait_for_ack(self, deadline: float, cancel: threading.Event | None = None) -> int | None:
+        with self._condition:
+            while not self._acks:
+                self._check_cancel(cancel)
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    break
+                self._condition.wait(min(0.025, remaining))
+            return self._acks.popleft() if self._acks else None
+
+    def _transmit_and_wait(self, message_type: int, seq: int, payload: bytes = b"", cancel: threading.Event | None = None) -> None:
+        missed = 0
+        busy_deadline = time.monotonic() + max(2.0, self.status_timeout)
+        while True:
+            self._check_cancel(cancel)
+            self._write_packet(message_type, seq, payload)
+            deadline = time.monotonic() + self.ack_timeout
+            ack = self._wait_for_ack(deadline, cancel)
+
+            if ack == ACK_OK:
+                return
+            if ack == ACK_BUSY:
+                # Ring-buffer backpressure is normal; do not spend the dropped-ACK budget.
+                if time.monotonic() > busy_deadline:
+                    raise SerialLinkError("STM32 stayed ACK_BUSY too long")
+                with self._condition:
+                    self._condition.wait(0.01)
+                continue
+            if ack is None:
+                missed += 1
+                if missed <= self.retries:
+                    continue  # Same seq + payload: STM32 deduplicates accepted commands.
+                raise SerialLinkError(f"No STM32 ACK for command 0x{message_type:02x}")
+            if ack == ACK_NO_AUDIO:
+                raise SerialLinkError("STM32 rejected audio: codec/DMA unavailable")
+            raise SerialLinkError(f"STM32 rejected command 0x{message_type:02x}: ACK_BAD")
+
     def _send_command(self, message_type: int, payload: bytes = b"", cancel: threading.Event | None = None) -> None:
         with self._command_lock:
             seq = self._next_sequence()
             with self._condition:
                 self._pending_seq = seq
                 self._acks.clear()
-            missed = 0
-            busy_deadline = time.monotonic() + max(2.0, self.status_timeout)
             try:
-                while True:
-                    self.check_health()
-                    if cancel is not None and cancel.is_set():
-                        raise PlaybackCancelled()
-                    self._write_packet(message_type, seq, payload)
-                    deadline = time.monotonic() + self.ack_timeout
-                    with self._condition:
-                        while not self._acks:
-                            self.check_health()
-                            if cancel is not None and cancel.is_set():
-                                raise PlaybackCancelled()
-                            remaining = deadline - time.monotonic()
-                            if remaining <= 0:
-                                break
-                            self._condition.wait(min(0.025, remaining))
-                        ack = self._acks.popleft() if self._acks else None
-                    if ack == ACK_OK:
-                        return
-                    if ack == ACK_BUSY:
-                        # Ring-buffer backpressure is normal; do not spend the dropped-ACK budget.
-                        if time.monotonic() > busy_deadline:
-                            raise SerialLinkError("STM32 stayed ACK_BUSY too long")
-                        with self._condition:
-                            self._condition.wait(0.01)
-                        continue
-                    if ack is None:
-                        missed += 1
-                        if missed <= self.retries:
-                            continue  # Same seq + payload: STM32 deduplicates accepted commands.
-                        raise SerialLinkError(f"No STM32 ACK for command 0x{message_type:02x}")
-                    if ack == ACK_NO_AUDIO:
-                        raise SerialLinkError("STM32 rejected audio: codec/DMA unavailable")
-                    raise SerialLinkError(f"STM32 rejected command 0x{message_type:02x}: ACK_BAD")
+                self._transmit_and_wait(message_type, seq, payload, cancel)
             finally:
                 with self._condition:
                     self._pending_seq = None
@@ -301,8 +309,11 @@ class SerialLink:
         if samples > 0xFFFFFFFF:
             raise ValueError("PCM exceeds the firmware sample-count range")
         with self._play_lock:
-            self.check_health()
-            if not samples or (cancel is not None and cancel.is_set()):
+            try:
+                self._check_cancel(cancel)
+            except PlaybackCancelled:
+                return
+            if not samples:
                 return
             with self._condition:
                 self._expected_samples = samples
@@ -315,9 +326,7 @@ class SerialLink:
                 deadline = time.monotonic() + samples / 16_000 + self.status_timeout
                 with self._condition:
                     while self._done_samples != samples:
-                        self.check_health()
-                        if cancel is not None and cancel.is_set():
-                            raise PlaybackCancelled()
+                        self._check_cancel(cancel)
                         if time.monotonic() >= deadline:
                             raise SerialLinkError("STM32 DONE timeout; audio completion is unknown")
                         self._condition.wait(0.025)
