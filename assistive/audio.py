@@ -94,6 +94,15 @@ class MockSynthesizer:
 
 
 @dataclass
+class SpeechRequest:
+    text: str
+    priority: int = 10
+    key: str = ""
+    ttl: float = 5.
+    repeat_after: float = 4.
+    replace: bool = False
+
+@dataclass
 class SpeechTicket:
     text: str
     priority: int
@@ -119,15 +128,15 @@ class SpeechWorker:
     def start(self):
         self.thread.start()
 
-    def speak(self, text, priority=10, key="", ttl=5., repeat_after=4., replace=False):
+    def speak(self, request: SpeechRequest):
         now = time.monotonic()
-        ticket = SpeechTicket(text, priority, key or text, now + ttl)
+        ticket = SpeechTicket(request.text, request.priority, request.key or request.text, now + request.ttl)
         with self._condition:
             if self._stop:
                 ticket.cancelled.set()
                 ticket.done.set()
                 return ticket
-            if not replace and now - self._recent.get(ticket.key, -1e9) < repeat_after:
+            if not request.replace and now - self._recent.get(ticket.key, -1e9) < request.repeat_after:
                 ticket.cancelled.set()
                 ticket.done.set()
                 return ticket
@@ -136,18 +145,18 @@ class SpeechWorker:
             while len(self._recent) > 128:
                 self._recent.popitem(last=False)
             # Urgent alerts or a mode change interrupt old speech, including PCM.
-            if self._active and (priority < self._active.priority or
-                                 (replace and priority <= self._active.priority)):
+            if self._active and (request.priority < self._active.priority or
+                                 (request.replace and request.priority <= self._active.priority)):
                 self._active.cancelled.set()
             for old in self._pending[:]:
-                if (replace and priority <= old.priority) or priority < old.priority or old.key == ticket.key:
+                if (request.replace and request.priority <= old.priority) or request.priority < old.priority or old.key == ticket.key:
                     self._pending.remove(old)
                     old.cancelled.set()
                     old.done.set()
             capacity = int(self.config.get("queue_size", 3))
             if len(self._pending) >= capacity:
                 worst = max(self._pending, key=lambda t: t.priority)
-                if worst.priority >= priority:
+                if worst.priority >= request.priority:
                     self._pending.remove(worst)
                     worst.cancelled.set()
                     worst.done.set()

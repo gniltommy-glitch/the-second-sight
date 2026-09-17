@@ -6,7 +6,7 @@ import unittest
 from unittest.mock import Mock, patch
 
 from assistive.app import AssistiveApp, Mode
-from assistive.audio import SpeechTicket
+from assistive.audio import SpeechTicket, SpeechRequest
 
 
 def config_fixture():
@@ -92,10 +92,10 @@ class FakeSpeech:
     def close(self):
         pass
 
-    def speak(self, text, **kwargs):
-        self.calls.append((text, kwargs))
-        key = kwargs.get("key", "")
-        ticket = SpeechTicket(text, kwargs.get("priority", 10), key, time.monotonic() + 30)
+    def speak(self, request):
+        self.calls.append(request)
+        key = request.key
+        ticket = SpeechTicket(request.text, request.priority, key, time.monotonic() + 30)
         if key == "ocr-result":
             self.result_ticket = ticket
         else:
@@ -171,7 +171,7 @@ class AppTests(unittest.TestCase):
             app.run(duration=1)
         self.assertEqual(app.models.yolo_starts, 2)
         self.assertIn("speech_done", [entry[0] for entry in trace])
-        failure_messages = [text for text, kwargs in app.speech.calls if kwargs.get("key") == "ocr-result"]
+        failure_messages = [req.text for req in app.speech.calls if req.key == "ocr-result"]
         self.assertEqual(len(failure_messages), 1)
         self.assertIn("Không đọc được", failure_messages[0])
 
@@ -182,7 +182,7 @@ class AppTests(unittest.TestCase):
         now = time.monotonic()
         app._handle_model_event(("result", (1, now - 10, [])), now)
         app.navigation.analyze.assert_not_called()
-        self.assertEqual(app.speech.calls[-1][1]["key"], "vision-stale")
+        self.assertEqual(app.speech.calls[-1].key, "vision-stale")
 
     def test_fresh_tof_is_not_fused_with_temporally_distant_camera_frame(self):
         app, _ = self.make_app()
@@ -197,9 +197,9 @@ class AppTests(unittest.TestCase):
         app, _ = self.make_app(buttons=False, distance=400)
         with patch("assistive.app.notify_systemd"):
             app.run(duration=.08)
-        emergencies = [kwargs for _, kwargs in app.speech.calls if kwargs.get("key") == "tof_emergency"]
+        emergencies = [req for req in app.speech.calls if req.key == "tof_emergency"]
         self.assertTrue(emergencies)
-        self.assertTrue(all(kwargs["priority"] == 0 for kwargs in emergencies))
+        self.assertTrue(all(req.priority == 0 for req in emergencies))
 
 
 if __name__ == "__main__":
