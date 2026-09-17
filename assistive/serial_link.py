@@ -241,6 +241,18 @@ class SerialLink:
         self._sequence = (self._sequence + 1) & 0xFFFF
         return self._sequence
 
+    def _wait_for_ack(self, deadline: float, cancel: threading.Event | None = None) -> int | None:
+        with self._condition:
+            while not self._acks:
+                self.check_health()
+                if cancel is not None and cancel.is_set():
+                    raise PlaybackCancelled()
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    break
+                self._condition.wait(min(0.025, remaining))
+            return self._acks.popleft() if self._acks else None
+
     def _send_command(self, message_type: int, payload: bytes = b"", cancel: threading.Event | None = None) -> None:
         with self._command_lock:
             seq = self._next_sequence()
@@ -256,16 +268,9 @@ class SerialLink:
                         raise PlaybackCancelled()
                     self._write_packet(message_type, seq, payload)
                     deadline = time.monotonic() + self.ack_timeout
-                    with self._condition:
-                        while not self._acks:
-                            self.check_health()
-                            if cancel is not None and cancel.is_set():
-                                raise PlaybackCancelled()
-                            remaining = deadline - time.monotonic()
-                            if remaining <= 0:
-                                break
-                            self._condition.wait(min(0.025, remaining))
-                        ack = self._acks.popleft() if self._acks else None
+
+                    ack = self._wait_for_ack(deadline, cancel)
+
                     if ack == ACK_OK:
                         return
                     if ack == ACK_BUSY:
